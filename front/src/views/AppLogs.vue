@@ -9,15 +9,15 @@
                 <Led :status="data.status" />
                 <template v-if="data.message">
                     <span v-html="data.message" />
-                    <span v-if="data.status === 'ok'"> (<a @click="configure = true">configure</a>) </span>
+                    <span v-if="data.status === 'ok'"> (<a @click="configure = true">配置</a>) </span>
                 </template>
-                <span v-else-if="loading">Loading...</span>
+                <span v-else-if="loading">加载中...</span>
             </div>
 
             <v-form v-if="configured">
                 <v-select :items="sources" v-model="query.source" outlined hide-details dense :menu-props="{ offsetY: true }" class="mt-4" />
 
-                <div class="subtitle-1 mt-3">Query:</div>
+                <div class="subtitle-1 mt-3">查询：</div>
                 <div class="d-flex flex-wrap flex-md-nowrap" style="gap: 8px">
                     <QueryBuilder
                         v-model="query.filters"
@@ -33,10 +33,10 @@
 
                 <v-btn-toggle :value="query.view" mandatory dense class="mt-2">
                     <v-btn value="messages" height="40" @click="query.view = 'messages'">
-                        <v-icon small>mdi-format-list-bulleted</v-icon>Messages
+                        <v-icon small>mdi-format-list-bulleted</v-icon>消息
                     </v-btn>
                     <v-btn value="patterns" :disabled="query.source !== 'agent'" height="40" @click="query.view = 'patterns'">
-                        <v-icon small>mdi-creation</v-icon>Patterns
+                        <v-icon small>mdi-creation</v-icon>模式
                     </v-btn>
                 </v-btn-toggle>
             </v-form>
@@ -54,8 +54,8 @@
                     <v-simple-table v-if="entries.length" dense class="entries">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Message</th>
+                                <th>日期</th>
+                                <th>消息</th>
                             </tr>
                         </thead>
                         <tbody class="mono">
@@ -70,11 +70,11 @@
                             </tr>
                         </tbody>
                     </v-simple-table>
-                    <div v-else-if="!loading" class="pa-3 text-center grey--text">No messages found</div>
+                    <div v-else-if="!loading" class="pa-3 text-center grey--text">未发现消息</div>
                     <div v-if="entries.length === query.limit" class="text-right caption grey--text mt-1">
-                        The output is capped at
+                        输出限制为
                         <InlineSelect v-model="query.limit" :items="limits" />
-                        messages.
+                        条消息。
                     </div>
                     <LogEntry v-if="entry" v-model="entry" @filter="qbAdd" :appId="appId" />
                 </div>
@@ -89,7 +89,7 @@
                             <div class="percent">{{ p.percent }}</div>
                         </div>
                     </div>
-                    <div v-else-if="!loading" class="pa-3 text-center grey--text">No patterns found</div>
+                    <div v-else-if="!loading" class="pa-3 text-center grey--text">未发现模式</div>
                     <LogPattern v-if="pattern" v-model="pattern" :messages="configured" @filter="qbAdd" />
                 </div>
             </template>
@@ -98,17 +98,17 @@
         <v-dialog v-model="configure" max-width="800">
             <v-card class="pa-5">
                 <div class="d-flex align-center font-weight-medium mb-4">
-                    Link "{{ $utils.appId(appId).name }}" with a service
+                    将 "{{ $utils.appId(appId).name }}" 链接到服务
                     <v-spacer />
                     <v-btn icon @click="configure = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
 
-                <div class="subtitle-1">Choose a corresponding OpenTelemetry service:</div>
+                <div class="subtitle-1">选择对应的 OpenTelemetry 服务：</div>
                 <v-select v-model="form.service" :items="services" outlined dense hide-details :menu-props="{ offsetY: true }" clearable />
 
                 <div class="grey--text my-4">
-                    To configure an application to send logs follow the
-                    <a href="https://coroot.com/docs/coroot/logs" target="_blank">documentation</a>.
+                    要配置应用发送日志，请参考
+                    <a href="https://coroot.com/docs/coroot/logs" target="_blank">文档</a>。
                 </div>
 
                 <v-alert v-if="error" color="red" icon="mdi-alert-octagon-outline" outlined text class="my-3">
@@ -117,7 +117,7 @@
                 <v-alert v-if="message" color="green" outlined text class="my-3">
                     {{ message }}
                 </v-alert>
-                <v-btn block color="primary" @click="save" :loading="saving" class="mt-5">Save</v-btn>
+                <v-btn block color="primary" @click="save" :loading="saving" class="mt-5">保存</v-btn>
             </v-card>
         </v-dialog>
     </div>
@@ -190,7 +190,7 @@ export default {
             return (this.data.sources || []).map((s) => {
                 return {
                     value: s,
-                    text: s === 'otel' ? 'OpenTelemetry' : 'Container logs',
+                    text: s === 'otel' ? 'OpenTelemetry' : '容器日志',
                 };
             });
         },
@@ -327,7 +327,7 @@ export default {
                 if (error || data.status === 'warning') {
                     this.loadingError = error || data.message;
                     this.data.status = 'warning';
-                    this.data.message = 'Failed to load logs';
+                    this.data.message = '加载日志失败';
                     return;
                 }
                 this.data = data;
@@ -387,7 +387,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'Settings were successfully updated.';
+                this.message = '设置更新成功。';
                 setTimeout(() => {
                     this.message = '';
                     this.configure = false;

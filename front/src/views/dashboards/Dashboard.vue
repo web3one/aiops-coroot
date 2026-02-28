@@ -5,9 +5,9 @@
         <div class="d-flex mb-3">
             <v-spacer />
             <div v-if="edit" class="d-flex gap-1">
-                <v-btn color="primary" plain @click="panel = {}">Add panel</v-btn>
-                <v-btn color="primary" @click="save">Save</v-btn>
-                <v-btn color="primary" outlined @click="cancel">Cancel</v-btn>
+                <v-btn color="primary" plain @click="panel = {}">添加面板</v-btn>
+                <v-btn color="primary" @click="save">保存</v-btn>
+                <v-btn color="primary" outlined @click="cancel">取消</v-btn>
             </div>
             <div v-else class="d-flex gap-1">
                 <v-btn icon @click="$events.emit('refresh')"><v-icon>mdi-refresh</v-icon></v-btn>
@@ -16,7 +16,7 @@
         </div>
 
         <div v-if="!groups.length" class="text-center pt-10">
-            <div class="grey--text mb-3">No panels are configured yet.</div>
+            <div class="grey--text mb-3">尚未配置面板。</div>
             <v-btn
                 color="primary"
                 @click="
@@ -27,7 +27,7 @@
                 "
             >
                 <v-icon>mdi-plus</v-icon>
-                Add panel
+                添加面板
             </v-btn>
         </div>
 

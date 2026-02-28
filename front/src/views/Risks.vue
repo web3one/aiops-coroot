@@ -8,7 +8,7 @@
                 <div class="label">{{ s.name }}</div>
             </div>
             <v-checkbox
-                label="Show dismissed"
+                label="显示已忽略"
                 :value="showDismissed"
                 @change="changeShowDismissed"
                 class="font-weight-regular mt-0 pt-0 ml-2"
@@ -25,7 +25,7 @@
             :items-per-page="50"
             :items="items"
             must-sort
-            no-data-text="No risks found"
+            no-data-text="未发现风险"
             ref="table"
             :headers="headers"
             :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100, -1] }"
@@ -70,9 +70,9 @@
             <template #item.description="{ item }">
                 <div :class="{ 'grey--text': item.dismissal }">
                     <template v-if="item.exposure">
-                        Publicly exposed database on
+                        公开暴露的数据库：
                         <template v-if="item.exposure.ips.length > 1">
-                            {{ item.exposure.ips.length }} IPs
+                            {{ item.exposure.ips.length }} 个 IP
                             <v-menu offset-y tile>
                                 <template #activator="{ on }">
                                     <span v-on="on" class="text-no-wrap ips"> {{ item.exposure.ips[0] }}</span>
@@ -86,7 +86,7 @@
                         </template>
                         <span v-else>IP {{ item.exposure.ips[0] }}</span>
                         <template v-if="item.exposure.node_port_services">
-                            through the NodePort {{ $pluralize('service', item.exposure.node_port_services.length) }}
+                            ，通过 NodePort 服务
                             <v-menu offset-y tile>
                                 <template #activator="{ on }">
                                     <span v-on="on" class="text-no-wrap ips"> {{ item.exposure.node_port_services[0] }}</span>
@@ -99,7 +99,7 @@
                             </v-menu>
                         </template>
                         <template v-else-if="item.exposure.load_balancer_services">
-                            through the LoadBalancer {{ $pluralize('service', item.exposure.load_balancer_services.length) }}
+                            ，通过 LoadBalancer 服务
                             <v-menu offset-y tile>
                                 <template #activator="{ on }">
                                     <span v-on="on" class="text-no-wrap ips"> {{ item.exposure.load_balancer_services[0] }}</span>
@@ -111,15 +111,14 @@
                                 </v-list>
                             </v-menu>
                         </template>
-                        <template v-else> {{ $pluralize('port', item.exposure.ports.length) }} {{ item.exposure.ports.join(', ') }} </template>
+                        <template v-else> ，端口 {{ item.exposure.ports.join(', ') }} </template>
                     </template>
                     <template v-else-if="item.availability">
                         {{ item.availability.description }}
                     </template>
                 </div>
                 <div v-if="item.dismissal" class="caption">
-                    Dismissed by {{ item.dismissal.by }} ({{ $format.date(item.dismissal.timestamp * 1000, '{YYYY}-{MM}-{DD} {HH}:{mm}:{ss}') }}) as
-                    "{{ item.dismissal.reason }}"
+                    由 {{ item.dismissal.by }} 忽略 ({{ $format.date(item.dismissal.timestamp * 1000, '{YYYY}-{MM}-{DD} {HH}:{mm}:{ss}') }})，原因为 "{{ item.dismissal.reason }}"
                 </div>
             </template>
 
@@ -133,18 +132,18 @@
 
                     <v-list dense>
                         <template v-if="!item.dismissal">
-                            <v-list-item @click="post('dismiss', item.key, item.application_id, 'tolerable for this project')">
-                                <v-icon small class="mr-1">mdi-bell-off-outline</v-icon> Dismiss: tolerable for this project
+                            <v-list-item @click="post('dismiss', item.key, item.application_id, '此项目可接受')">
+                                <v-icon small class="mr-1">mdi-bell-off-outline</v-icon> 忽略：此项目可接受
                             </v-list-item>
                             <v-list-item
                                 v-if="item.exposure"
-                                @click="post('dismiss', item.key, item.application_id, 'controlled by network policies')"
+                                @click="post('dismiss', item.key, item.application_id, '受网络策略控制')"
                             >
-                                <v-icon small class="mr-1">mdi-security-network</v-icon> Dismiss: controlled by network policies
+                                <v-icon small class="mr-1">mdi-security-network</v-icon> 忽略：受网络策略控制
                             </v-list-item>
                         </template>
                         <v-list-item v-else @click="post('mark_as_active', item.key, item.application_id)">
-                            <v-icon small class="mr-1">mdi-bell-outline</v-icon> Mark as Active
+                            <v-icon small class="mr-1">mdi-bell-outline</v-icon> 标记为活动
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -158,9 +157,9 @@ import Views from '@/views/Views.vue';
 import ApplicationFilter from '../components/ApplicationFilter.vue';
 
 const statuses = {
-    critical: { name: 'Critical', color: 'red lighten-1' },
-    warning: { name: 'Warning', color: 'orange lighten-1' },
-    ok: { name: 'Dismissed', color: 'grey lighten-1' },
+    critical: { name: '严重', color: 'red lighten-1' },
+    warning: { name: '警告', color: 'orange lighten-1' },
+    ok: { name: '已忽略', color: 'grey lighten-1' },
 };
 
 export default {
@@ -193,11 +192,11 @@ export default {
     computed: {
         headers() {
             let headers = [
-                { value: 'application_id', text: 'Application', sortable: true },
-                { value: 'cluster', text: 'Cluster', sortable: true },
-                { value: 'application_type', text: 'Application type', sortable: false },
-                { value: 'severity', text: 'Risk category', sortable: false },
-                { value: 'description', text: 'Description', sortable: true },
+                { value: 'application_id', text: '应用', sortable: true },
+                { value: 'cluster', text: '集群', sortable: true },
+                { value: 'application_type', text: '应用类型', sortable: false },
+                { value: 'severity', text: '风险类别', sortable: false },
+                { value: 'description', text: '描述', sortable: true },
                 { value: 'actions', text: '', sortable: false, align: 'end', width: '20px' },
             ];
             if (!this.$api.context.multicluster) {

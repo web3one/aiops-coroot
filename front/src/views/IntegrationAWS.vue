@@ -1,24 +1,23 @@
 <template>
     <div style="max-width: 800px">
         <p>
-            This integration enables Coroot to discover RDS and ElastiCache instances and collect their telemetry data. It requires permissions to
-            describe RDS and ElastiCache instances, read their logs and read Enhanced Monitoring data from CloudWatch.
+            此集成使 Coroot 能够发现 RDS 和 ElastiCache 实例并收集其遥测数据。它需要描述 RDS 和 ElastiCache 实例、读取其日志以及从 CloudWatch 读取增强监控数据的权限。
         </p>
 
         <p>
-            <b>Step #1</b>: create an
+            <b>步骤 #1</b>：创建
             <a
                 href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create-console.html#access_policies_create-json-editor"
                 target="_blank"
             >
-                IAM policy
+                IAM 策略
             </a>
-            with the <a @click="policyDialog = true">following permissions</a>.
+            并包含 <a @click="policyDialog = true">以下权限</a>。
         </p>
         <v-dialog v-model="policyDialog" max-width="800">
             <v-card class="pa-5">
                 <div class="text-h6 d-flex mb-5">
-                    MonitoringReadOnlyAccess role
+                    MonitoringReadOnlyAccess 角色
                     <v-spacer />
                     <v-btn icon @click="policyDialog = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
@@ -58,14 +57,14 @@
         </v-dialog>
 
         <p>
-            <b>Step #2</b>: create an
-            <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console" target="_blank">IAM user</a>
-            with programmatic access, attach the policy to it and use AccessKeyID/SecretAccessKey in the form below.
+            <b>步骤 #2</b>：创建一个具有编程访问权限的
+            <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html#id_users_create_console" target="_blank">IAM 用户</a>，
+            将上述策略附加给它，并在下面的表单中使用 AccessKeyID/SecretAccessKey。
         </p>
 
         <v-form v-if="form" v-model="valid" ref="form">
-            <div class="subtitle-1 mt-3">Region</div>
-            <div class="caption">Coroot only discovers RDS and ElastiCache instances within the specified region, e.g. <var>us-west-1</var></div>
+            <div class="subtitle-1 mt-3">区域</div>
+            <div class="caption">Coroot 仅发现在指定区域内的 RDS 和 ElastiCache 实例，例如：<var>us-west-1</var></div>
             <v-text-field v-model="form.region" :rules="[$validators.notEmpty]" outlined dense hide-details single-line clearable />
 
             <div class="subtitle-1 mt-3">Access Key ID</div>
@@ -74,20 +73,18 @@
             <div class="subtitle-1 mt-3">Secret Access Key</div>
             <v-text-field v-model="form.secret_access_key" :rules="[$validators.notEmpty]" outlined dense hide-details single-line type="password" />
 
-            <div class="subtitle-1 mt-3">RDS tag filters</div>
+            <div class="subtitle-1 mt-3">RDS 标签过滤器</div>
             <div class="caption">
-                You can limit the discovery of RDS instances by filtering them based on their tags.
+                您可以通过基于标签过滤 RDS 实例来限制发现范围。
                 <br />
-                Specify tag_name=tag_value pairs, <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">glob patterns</a> are
-                supported for the value part, e.g. <var>team=qa,env=staging*</var>.
+                指定 tag_name=tag_value 键值对，值的部分支持 <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">通配符模式 (glob patterns)</a>，例如：<var>team=qa,env=staging*</var>。
             </div>
             <v-text-field v-model="rds_tag_filters" outlined dense hide-details single-line />
-            <div class="subtitle-1 mt-3">ElastiCache tag filters</div>
+            <div class="subtitle-1 mt-3">ElastiCache 标签过滤器</div>
             <div class="caption">
-                You can limit the discovery of ElastiCache instances by filtering them based on their tags.
+                您可以通过基于标签过滤 ElastiCache 实例来限制发现范围。
                 <br />
-                Specify tag_name=tag_value pairs, <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">glob patterns</a> are
-                supported for the value part, e.g. <var>team=qa,env=staging*</var>.
+                指定 tag_name=tag_value 键值对，值的部分支持 <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">通配符模式 (glob patterns)</a>，例如：<var>team=qa,env=staging*</var>。
             </div>
             <v-text-field v-model="elasticache_tag_filters" outlined dense hide-details single-line />
 
@@ -98,20 +95,20 @@
                 {{ message }}
             </v-alert>
             <div class="mt-3">
-                <v-btn v-if="saved.region && !form.region" block color="error" @click="del" :loading="loading">Delete</v-btn>
-                <v-btn v-else block color="primary" @click="save" :disabled="!valid" :loading="loading">Save</v-btn>
+                <v-btn v-if="saved.region && !form.region" block color="error" @click="del" :loading="loading">删除</v-btn>
+                <v-btn v-else block color="primary" @click="save" :disabled="!valid" :loading="loading">保存</v-btn>
             </div>
         </v-form>
 
-        <h2 class="text-h6 mt-10 mb-3">Discovery status</h2>
-        <v-alert v-if="form && !form.region" color="primary" outlined text> Not configured </v-alert>
+        <h2 class="text-h6 mt-10 mb-3">发现状态</h2>
+        <v-alert v-if="form && !form.region" color="primary" outlined text> 未配置 </v-alert>
         <v-alert v-else-if="errors.length" color="error" outlined text class="pb-2">
             <div v-for="e in errors" class="mb-2">• {{ e }}</div>
         </v-alert>
-        <v-alert v-else-if="!error" color="success" outlined text> OK </v-alert>
-        <v-alert v-else outlined text> Unknown </v-alert>
+        <v-alert v-else-if="!error" color="success" outlined text> 正常 </v-alert>
+        <v-alert v-else outlined text> 未知 </v-alert>
 
-        <h2 class="text-h6 mt-10 mb-3">Discovered instances</h2>
+        <h2 class="text-h6 mt-10 mb-3">已发现的实例</h2>
         <v-data-table
             :items="instances"
             sort-by="application_id"
@@ -120,15 +117,15 @@
             class="instances"
             mobile-breakpoint="0"
             :items-per-page="20"
-            no-data-text="No instances found"
+            no-data-text="未发现实例"
             :headers="[
-                { value: 'application_id', text: 'Application', align: 'start' },
-                { value: 'name', text: 'Instance', align: 'start' },
-                { value: 'status', text: 'Status', align: 'start' },
-                { value: 'engine', text: 'Engine', align: 'start' },
-                { value: 'engine_version', text: 'Version', align: 'start' },
-                { value: 'instance_type', text: 'Instance type', align: 'start' },
-                { value: 'availability_zone', text: 'AZ', align: 'start' },
+                { value: 'application_id', text: '应用', align: 'start' },
+                { value: 'name', text: '实例', align: 'start' },
+                { value: 'status', text: '状态', align: 'start' },
+                { value: 'engine', text: '引擎', align: 'start' },
+                { value: 'engine_version', text: '版本', align: 'start' },
+                { value: 'instance_type', text: '实例类型', align: 'start' },
+                { value: 'availability_zone', text: '可用区', align: 'start' },
             ]"
             :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100, -1] }"
         >
@@ -215,7 +212,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'Settings were successfully updated. The changes will take effect in a minute or two.';
+                this.message = '设置更新成功。更改将在一两分钟内生效。';
                 setTimeout(() => {
                     this.message = '';
                 }, 3000);

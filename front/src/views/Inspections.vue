@@ -2,16 +2,16 @@
     <v-simple-table>
         <thead>
             <tr>
-                <th>Inspection</th>
-                <th>Project-level override</th>
-                <th>Application-level override</th>
+                <th>检查项</th>
+                <th>项目级覆盖</th>
+                <th>应用级覆盖</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="c in checks">
                 <td>
                     {{ c.title }}
-                    <div class="grey--text text-no-wrap">Condition: {{ formatCondition(c) }}</div>
+                    <div class="grey--text text-no-wrap">条件：{{ formatCondition(c) }}</div>
                 </td>
                 <td>
                     <a @click="edit('::', c)">

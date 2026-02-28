@@ -3,7 +3,7 @@
         <div>
             <v-text-field
                 v-model="searchString"
-                label="search"
+                label="搜索"
                 clearable
                 dense
                 hide-details
@@ -17,7 +17,7 @@
             <v-autocomplete
                 :items="namespaces"
                 v-model="selectedNamespaces"
-                label="namespaces"
+                label="命名空间"
                 :disabled="namespacesDisabled"
                 color="primary"
                 multiple
@@ -68,7 +68,7 @@
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
                 </template>
-                <v-card class="px-2">configure categories</v-card>
+                <v-card class="px-2">配置分类</v-card>
             </v-tooltip>
         </div>
     </div>

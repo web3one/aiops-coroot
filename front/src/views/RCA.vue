@@ -3,14 +3,14 @@
         <template #subtitle>{{ $utils.appId(appId).name }}</template>
 
         <v-alert v-if="rca === 'not implemented'" color="info" outlined text class="mt-5">
-            AI-powered Root Cause Analysis is available only in Coroot Enterprise (from $1 per CPU core/month).
-            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">Start</a> your free trial today.
+            AI 驱动的根因分析仅在 Coroot 企业版中可用（起价为每月每 CPU 核心 1 美元）。
+            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">立即开始</a> 您的免费试用。
         </v-alert>
 
         <div v-else-if="rca">
             <template v-if="rca.latency_chart || rca.errors_chart">
                 <div class="text-h6">
-                    Service Level Indicators of
+                    服务水平指标 (SLIs):
                     <router-link :to="{ name: 'overview', params: { view: 'applications', id: appId }, query: $utils.contextQuery() }" class="name">
                         {{ $utils.appId(appId).name }}
                     </router-link>
@@ -18,7 +18,7 @@
 
                 <div class="grey--text mb-2 mt-1">
                     <v-icon size="18" style="vertical-align: baseline">mdi-lightbulb-on-outline</v-icon>
-                    Select a chart area to identify the root cause of an anomaly
+                    选择图表区域以识别异常的根本原因
                 </div>
 
                 <v-row>
@@ -47,13 +47,13 @@
 
             <div v-if="rca.summary">
                 <template v-if="rca.summary.root_cause">
-                    <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire</v-icon> Root Cause</div>
+                    <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire</v-icon> 根本原因</div>
                     <Markdown :src="rca.summary.root_cause" :widgets="[]" />
 
                     <template v-if="rca.summary.detailed_root_cause_analysis">
                         <div>
                             <a @click="toggle_rca_details">
-                                Show {{ show_details ? 'less' : 'more' }} details
+                                显示 {{ show_details ? '更少' : '更多' }} 细节
                                 <v-icon v-if="show_details">mdi-chevron-up</v-icon>
                                 <v-icon v-else>mdi-chevron-down</v-icon>
                             </a>
@@ -71,7 +71,7 @@
                 </template>
 
                 <template v-if="rca.summary.immediate_fixes">
-                    <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire-extinguisher</v-icon> Immediate Fixes</div>
+                    <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire-extinguisher</v-icon> 立即修复</div>
                     <Markdown :src="rca.summary.immediate_fixes" :widgets="[]" />
                 </template>
             </div>
@@ -85,7 +85,7 @@
                     <v-overlay absolute opacity="0.1" z-index="1">
                         <v-btn color="primary" @click="get('true')" class="mx-auto" :loading="loading">
                             <v-icon small left>mdi-creation</v-icon>
-                            Investigate with AI
+                            使用 AI 进行调查
                         </v-btn>
                     </v-overlay>
                 </div>
@@ -99,7 +99,7 @@
                     <v-overlay absolute opacity="0.1">
                         <v-btn color="primary" :to="{ name: 'project_settings', params: { tab: 'ai' } }" class="mx-auto">
                             <v-icon small left>mdi-creation</v-icon>
-                            Enable an AI integration
+                            启用 AI 集成
                         </v-btn>
                     </v-overlay>
                 </div>

@@ -4,26 +4,26 @@
             {{ error }}
         </v-alert>
         <v-alert v-if="disabled" color="info" outlined text>
-            Single Sign-On is available only in Coroot Enterprise (from $1 per CPU core/month).
-            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">Start</a> your free trial today.
+            单点登录 (SSO) 仅在 Coroot 企业版中可用（起价为每月每 CPU 核心 1 美元）。
+            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">立即开始</a> 您的免费试用。
         </v-alert>
         <v-alert v-if="readonly" color="primary" outlined text>
-            Single Sign-On is configured through the config and cannot be modified via the UI.
+            单点登录通过配置文件配置，无法通过 UI 修改。
         </v-alert>
         <v-simple-table v-if="status !== 403" dense class="params">
             <tbody>
                 <tr>
-                    <td class="font-weight-medium text-no-wrap">Status</td>
+                    <td class="font-weight-medium text-no-wrap">状态</td>
                     <td>
                         <div v-if="enabled">
                             <v-icon color="success" class="mr-1" size="20">mdi-check-circle</v-icon>
-                            Enabled
+                            已启用
                         </div>
-                        <div v-else>Disabled</div>
+                        <div v-else>已禁用</div>
                     </td>
                 </tr>
                 <tr>
-                    <td class="font-weight-medium text-no-wrap">Provider</td>
+                    <td class="font-weight-medium text-no-wrap">提供商</td>
                     <td>
                         <v-radio-group v-model="sso_provider" :disabled="disabled || readonly" row hide-details dense class="mt-0">
                             <v-radio label="SAML 2.0" value="saml"></v-radio>
@@ -34,12 +34,12 @@
 
                 <template v-if="sso_provider === 'saml'">
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Identity Provider:</td>
+                        <td class="font-weight-medium text-no-wrap">身份提供商：</td>
                         <td>
                             <span v-if="provider" style="vertical-align: middle">{{ provider }}</span>
                             <input ref="file" type="file" accept=".xml" @change="upload" class="d-none" />
                             <v-btn v-if="!provider" color="primary" small :disabled="disabled || loading || readonly" @click="$refs.file.click()">
-                                Upload Identity Provider Metadata XML
+                                上传身份提供商元数据 XML
                             </v-btn>
                             <v-btn v-else :disabled="disabled || loading || readonly" small icon @click="$refs.file.click()">
                                 <v-icon small>mdi-pencil</v-icon>
@@ -47,26 +47,26 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Service Provider Issuer / Identity ID:</td>
+                        <td class="font-weight-medium text-no-wrap">服务提供商发行者 / 实体 ID：</td>
                         <td>{{ saml_asc_url }} <CopyButton :text="saml_asc_url" :disabled="disabled" /></td>
                     </tr>
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Service Provider ACS URL / Single Sign On URL:</td>
+                        <td class="font-weight-medium text-no-wrap">服务提供商 ACS URL / 单点登录 URL：</td>
                         <td>{{ saml_asc_url }} <CopyButton :text="saml_asc_url" :disabled="disabled" /></td>
                     </tr>
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Attribute mapping:</td>
+                        <td class="font-weight-medium text-no-wrap">属性映射：</td>
                         <td>
-                            Coroot expects to receive the <b>Email</b>, <b>FirstName</b>, and <b>LastName</b> attributes.
+                            Coroot 需要接收 <b>Email</b>、<b>FirstName</b> 和 <b>LastName</b> 属性。
                             <br />
-                            Please configure Attribute Mapping on your Identity Provider's side.
+                            请在您的身份提供商端配置属性映射。
                         </td>
                     </tr>
                 </template>
 
                 <template v-if="sso_provider === 'oidc'">
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Issuer URL:</td>
+                        <td class="font-weight-medium text-no-wrap">发行者 URL：</td>
                         <td>
                             <v-text-field
                                 v-model="oidc.issuer_url"
@@ -80,13 +80,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Client ID:</td>
+                        <td class="font-weight-medium text-no-wrap">客户端 ID：</td>
                         <td>
                             <v-text-field v-model="oidc.client_id" :disabled="disabled || readonly" outlined dense hide-details class="oidc-input" />
                         </td>
                     </tr>
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Client Secret:</td>
+                        <td class="font-weight-medium text-no-wrap">客户端密钥 (Client Secret)：</td>
                         <td>
                             <v-text-field
                                 v-model="oidc.client_secret"
@@ -101,20 +101,20 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Redirect URI:</td>
+                        <td class="font-weight-medium text-no-wrap">重定向 URI：</td>
                         <td>
                             {{ oidc_callback_url }} <CopyButton :text="oidc_callback_url" :disabled="disabled" />
-                            <div class="caption grey--text mt-1">Configure this as the authorized redirect URL in your OIDC provider.</div>
+                            <div class="caption grey--text mt-1">在您的 OIDC 提供商中将其配置为授权重定向 URL。</div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="font-weight-medium text-no-wrap">Claims:</td>
-                        <td>Coroot expects to receive the <b>email</b>, <b>given_name</b>, and <b>family_name</b> claims from the ID token.</td>
+                        <td class="font-weight-medium text-no-wrap">声明 (Claims)：</td>
+                        <td>Coroot 需要从 ID 令牌中接收 <b>email</b>、<b>given_name</b> 和 <b>family_name</b> 声明。</td>
                     </tr>
                 </template>
 
                 <tr>
-                    <td class="font-weight-medium text-no-wrap">Default role:</td>
+                    <td class="font-weight-medium text-no-wrap">默认角色：</td>
                     <td>
                         <v-select
                             v-model="default_role"
@@ -133,9 +133,9 @@
         </v-simple-table>
         <div v-if="status !== 403" class="d-flex mt-2" style="gap: 8px">
             <v-btn color="primary" small :disabled="disabled || loading || readonly || !canSave" @click="save">
-                Save <template v-if="!enabled">and Enable</template>
+                保存 <template v-if="!enabled">并启用</template>
             </v-btn>
-            <v-btn v-if="enabled" color="error" small :disabled="disabled || loading || readonly" @click="disable">Disable</v-btn>
+            <v-btn v-if="enabled" color="error" small :disabled="disabled || loading || readonly" @click="disable">禁用</v-btn>
         </div>
     </div>
 </template>

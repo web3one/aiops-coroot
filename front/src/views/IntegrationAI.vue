@@ -1,18 +1,17 @@
 <template>
     <div style="max-width: 800px">
         <p>
-            Coroot leverages Large Language Models (LLMs) to automatically generate clear, concise summaries of root causes, helping your team
-            troubleshoot faster.
+            Coroot 利用大语言模型 (LLM) 自动生成清晰、简洁的根因摘要，帮助您的团队更快地排查故障。
         </p>
         <v-alert v-if="disabled" color="info" outlined text>
-            Available exclusively in Coroot Enterprise (from $1 per CPU core/month).<br />
-            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">Start</a> your free trial today.
+            仅在 Coroot 企业版中可用（起价为每月每 CPU 核心 1 美元）。<br />
+            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">立即开始</a> 您的免费试用。
         </v-alert>
         <v-alert v-if="readonly" color="primary" outlined text>
-            AI settings are defined through the config and cannot be modified via the UI.
+            AI 设置通过配置文件定义，无法通过 UI 修改。
         </v-alert>
         <v-form v-if="form" v-model="valid" :disabled="disabled || readonly" ref="form">
-            <div class="subtitle-1 mt-3">Model Provider</div>
+            <div class="subtitle-1 mt-3">模型提供商</div>
             <v-radio-group v-model="form.provider" row dense class="mt-0" hide-details>
                 <v-radio value="anthropic">
                     <template #label>
@@ -29,13 +28,13 @@
                 <v-radio value="openai_compatible">
                     <template #label>
                         <v-icon class="mr-1">mdi-cog-outline</v-icon>
-                        OpenAI-compatible API
+                        兼容 OpenAI 的 API
                     </template>
                 </v-radio>
                 <v-radio value="">
                     <template #label>
                         <v-icon class="mr-1">mdi-trash-can-outline</v-icon>
-                        Disabled
+                        已禁用
                     </template>
                 </v-radio>
             </v-radio-group>
@@ -43,8 +42,8 @@
             <template v-if="form.provider === 'anthropic'">
                 <div class="subtitle-1 mt-3">API Key</div>
                 <div class="caption">
-                    To integrate Coroot with Anthropic models, provide your Anthropic API key. You can get started by following the
-                    <a href="https://docs.anthropic.com/en/api/getting-started" target="_blank">official Anthropic API documentation</a>.
+                    要将 Coroot 与 Anthropic 模型集成，请提供您的 Anthropic API key。您可以参考
+                    <a href="https://docs.anthropic.com/en/api/getting-started" target="_blank">Anthropic 官方 API 文档</a>。
                 </div>
                 <v-text-field
                     v-model="form.anthropic.api_key"
@@ -60,21 +59,21 @@
             <template v-if="form.provider === 'openai'">
                 <div class="subtitle-1 mt-3">API Key</div>
                 <div class="caption">
-                    To integrate Coroot with OpenAI models, provide your OpenAI API key. Learn more about the API on the
-                    <a href="https://openai.com/index/openai-api/" target="_blank">OpenAI API overview page</a>.
+                    要将 Coroot 与 OpenAI 模型集成，请提供您的 OpenAI API key。了解更多关于 API 的信息请访问
+                    <a href="https://openai.com/index/openai-api/" target="_blank">OpenAI API 概览页面</a>。
                 </div>
                 <v-text-field v-model="form.openai.api_key" :rules="[$validators.notEmpty]" outlined dense hide-details single-line type="password" />
             </template>
 
             <template v-if="form.provider === 'openai_compatible'">
-                <div class="subtitle-1 mt-3">Base URL</div>
+                <div class="subtitle-1 mt-3">基础 URL</div>
                 <div class="caption">
-                    The base URL for API requests to the model provider. Refer to their documentation for configuration details.
+                    模型提供商的 API 请求基础 URL。有关配置详情，请参阅其文档。
                 </div>
                 <v-text-field v-model="form.openai_compatible.base_url" :rules="[$validators.isUrl]" outlined dense hide-details single-line />
 
                 <div class="subtitle-1 mt-3">API Key</div>
-                <div class="caption">To integrate Coroot with an OpenAI-compatible model, provide your API key.</div>
+                <div class="caption">要将 Coroot 与兼容 OpenAI 的模型集成，请提供您的 API key。</div>
                 <v-text-field
                     v-model="form.openai_compatible.api_key"
                     :rules="[$validators.notEmpty]"
@@ -85,8 +84,8 @@
                     type="password"
                 />
 
-                <div class="subtitle-1 mt-3">Model</div>
-                <div class="caption">The name or ID of the model to use. Refer to your provider’s documentation for valid values.</div>
+                <div class="subtitle-1 mt-3">模型</div>
+                <div class="caption">要使用的模型名称或 ID。有效值请参阅提供商的文档。</div>
                 <v-text-field v-model="form.openai_compatible.model" :rules="[$validators.notEmpty]" outlined dense hide-details single-line />
             </template>
 
@@ -97,7 +96,7 @@
                 {{ message }}
             </v-alert>
             <div class="mt-3 d-flex" style="gap: 8px">
-                <v-btn color="primary" @click="save" :disabled="disabled || readonly || !valid || !changed" :loading="loading">Save</v-btn>
+                <v-btn color="primary" @click="save" :disabled="disabled || readonly || !valid || !changed" :loading="loading">保存</v-btn>
             </div>
         </v-form>
     </div>
@@ -158,7 +157,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'Settings were successfully updated.';
+                this.message = '设置更新成功。';
                 setTimeout(() => {
                     this.message = '';
                 }, 3000);

@@ -2,24 +2,24 @@
     <v-dialog v-model="dialog" max-width="600">
         <v-card class="pa-4">
             <div class="d-flex align-center font-weight-medium mb-4">
-                Change password
+                修改密码
                 <v-spacer />
                 <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
             </div>
             <v-form v-model="valid" @submit.prevent="post" ref="form">
-                <div class="font-weight-medium">Old password</div>
+                <div class="font-weight-medium">旧密码</div>
                 <v-text-field outlined dense type="password" v-model="form.old_password" :rules="[$validators.notEmpty]" />
 
-                <div class="font-weight-medium">New password</div>
+                <div class="font-weight-medium">新密码</div>
                 <v-text-field outlined dense type="password" v-model="form.new_password" :rules="[$validators.notEmpty]" />
 
-                <div class="font-weight-medium">Confirm password</div>
+                <div class="font-weight-medium">确认密码</div>
                 <v-text-field
                     outlined
                     dense
                     type="password"
                     v-model="confirm_password"
-                    :rules="[$validators.notEmpty, (v) => v === form.new_password || 'passwords do not match']"
+                    :rules="[$validators.notEmpty, (v) => v === form.new_password || '密码不匹配']"
                 />
 
                 <v-alert v-if="error" color="red" icon="mdi-alert-octagon-outline" outlined text>
@@ -31,7 +31,7 @@
 
                 <div class="d-flex align-center">
                     <v-spacer />
-                    <v-btn type="submit" :disabled="!valid" :loading="loading" color="primary" class="mt-5">Change</v-btn>
+                    <v-btn type="submit" :disabled="!valid" :loading="loading" color="primary" class="mt-5">修改</v-btn>
                 </div>
             </v-form>
         </v-card>
@@ -87,7 +87,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'User password changed.';
+                this.message = '用户密码已修改。';
             });
         },
     },

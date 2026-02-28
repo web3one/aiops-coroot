@@ -22,7 +22,7 @@
             </div>
             <v-alert v-if="error" color="error" text class="mt-2 rounded-0">{{ error }}</v-alert>
             <Chart v-if="data.chart" :chart="data.chart" class="flex-grow-1" />
-            <div v-else class="d-flex align-center justify-center" style="height: 100%">No data</div>
+            <div v-else class="d-flex align-center justify-center" style="height: 100%">无数据</div>
         </v-card>
     </div>
 </template>

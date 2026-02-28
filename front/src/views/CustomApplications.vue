@@ -3,9 +3,9 @@
         <v-simple-table>
             <thead>
                 <tr>
-                    <th>Application name</th>
-                    <th>Instance patterns</th>
-                    <th>Actions</th>
+                    <th>应用名称</th>
+                    <th>实例模式</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,28 +29,27 @@
             </tbody>
         </v-simple-table>
 
-        <v-btn color="primary" class="mt-3" @click="openForm()" small>Add an application</v-btn>
+        <v-btn color="primary" class="mt-3" @click="openForm()" small>添加应用</v-btn>
 
         <v-dialog v-model="form.active" max-width="800">
             <v-card class="pa-4">
                 <div class="d-flex align-center font-weight-medium mb-4">
-                    <div v-if="form.new">Add a new custom application</div>
-                    <div v-else-if="form.del">Delete the "{{ form.name }}" application</div>
-                    <div v-else>Edit the "{{ form.name }}" application</div>
+                    <div v-if="form.new">添加新自定义应用</div>
+                    <div v-else-if="form.del">删除 "{{ form.name }}" 应用</div>
+                    <div v-else>编辑 "{{ form.name }}" 应用</div>
                     <v-spacer />
                     <v-btn icon @click="form.active = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
 
                 <v-form v-model="form.valid" ref="form">
-                    <div class="subtitle-1">Name</div>
+                    <div class="subtitle-1">名称</div>
                     <v-text-field v-model="form.name" outlined dense :disabled="form.del" :rules="[$validators.isSlug]" />
 
                     <template>
-                        <div class="subtitle-1">Instance patterns</div>
+                        <div class="subtitle-1">实例模式</div>
                         <div class="caption">
-                            space-delimited list of
-                            <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">glob patterns</a>
-                            for <var>instance_name</var>, e.g.: <var>mysql@node1 cassandra@cass-node*</var>
+                            以空格分隔的 <a href="https://en.wikipedia.org/wiki/Glob_(programming)" target="_blank">通配符模式 (glob patterns)</a>，
+                            匹配 <var>instance_name</var>，例如：<var>mysql@node1 cassandra@cass-node*</var>
                         </div>
                         <v-textarea v-model="form.instance_patterns" outlined dense rows="1" auto-grow :disabled="form.del" />
                     </template>
@@ -63,8 +62,8 @@
                     </v-alert>
                     <div class="d-flex align-center">
                         <v-spacer />
-                        <v-btn v-if="form.del" color="error" :loading="saving" @click="save">Delete</v-btn>
-                        <v-btn v-else color="primary" :disabled="!form.valid" :loading="saving" @click="save">Save</v-btn>
+                        <v-btn v-if="form.del" color="error" :loading="saving" @click="save">删除</v-btn>
+                        <v-btn v-else color="primary" :disabled="!form.valid" :loading="saving" @click="save">保存</v-btn>
                     </div>
                 </v-form>
             </v-card>
@@ -161,7 +160,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'Settings were successfully updated.';
+                this.message = '设置更新成功。';
                 setTimeout(() => {
                     this.message = '';
                     this.form.active = false;

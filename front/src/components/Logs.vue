@@ -9,7 +9,7 @@
             </v-alert>
 
             <v-card outlined class="px-4 mb-2" :class="showSources ? 'py-2' : 'pt-2 pb-4'">
-                <div class="subtitle-1">Query:</div>
+                <div class="subtitle-1">查询:</div>
                 <div class="d-flex flex-wrap flex-md-nowrap gap-2">
                     <QueryBuilder
                         v-model="query.filters"
@@ -24,7 +24,7 @@
                     <LogSearchButtons :interval="refreshInterval" @search="get" @refresh="setRefreshInterval" />
                 </div>
                 <div v-if="showSources" class="d-flex gap-2 sources">
-                    <v-checkbox v-model="query.agent" label="Container logs" :disabled="disabled" dense hide-details />
+                    <v-checkbox v-model="query.agent" label="容器日志" :disabled="disabled" dense hide-details />
                     <v-checkbox v-model="query.otel" label="OpenTelemetry" :disabled="disabled" dense hide-details />
                 </div>
             </v-card>
@@ -43,11 +43,11 @@
                 <v-list dense>
                     <v-list-item @click="addLegendFilter('=')">
                         <v-icon small class="mr-1">mdi-plus</v-icon>
-                        Show only {{ legendMenu.label }}
+                        仅显示 {{ legendMenu.label }}
                     </v-list-item>
                     <v-list-item @click="addLegendFilter('!=')">
                         <v-icon small class="mr-1">mdi-minus</v-icon>
-                        Exclude {{ legendMenu.label }}
+                        排除 {{ legendMenu.label }}
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -79,16 +79,16 @@
                                             <template v-if="e.attributes['service.name']">
                                                 <v-list-item @click="qbAdd('service.name', '=', e.attributes['service.name'])">
                                                     <v-icon small class="mr-1">mdi-plus</v-icon>
-                                                    add to search
+                                                    添加到查询
                                                 </v-list-item>
                                                 <v-list-item @click="qbAdd('service.name', '!=', e.attributes['service.name'])">
                                                     <v-icon small class="mr-1">mdi-minus</v-icon>
-                                                    exclude from search
+                                                    从查询中排除
                                                 </v-list-item>
                                             </template>
                                             <v-list-item v-if="e.link" :to="e.link">
                                                 <v-icon small class="mr-1">mdi-open-in-new</v-icon>
-                                                go to application
+                                                跳转到应用
                                             </v-list-item>
                                         </v-list>
                                     </v-menu>
@@ -103,11 +103,11 @@
                         </tr>
                     </tbody>
                 </v-simple-table>
-                <div v-else-if="!loading" class="pa-3 text-center grey--text">No messages found</div>
+                <div v-else-if="!loading" class="pa-3 text-center grey--text">未发现消息</div>
                 <div v-if="entries.length === query.limit" class="text-right caption grey--text mt-1">
-                    The output is capped at
+                    输出上限为
                     <InlineSelect v-model="query.limit" :items="limits" />
-                    messages.
+                    条消息。
                 </div>
                 <LogEntry v-if="entry" v-model="entry" @filter="qbAdd" />
             </div>

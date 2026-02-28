@@ -1,14 +1,14 @@
 <template>
     <v-form v-model="valid" ref="form" style="max-width: 800px">
         <v-alert v-if="form.global" color="primary" outlined text>
-            This project uses a global Prometheus configuration that can't be changed through the UI
+            此项目使用全局 Prometheus 配置，无法通过 UI 更改
         </v-alert>
 
-        <v-checkbox v-model="form.use_clickhouse" label="Use ClickHouse for metrics storage" class="my-2" hide-details :disabled="form.global" />
-        <div class="caption mb-3">When enabled, ClickHouse will be used instead of Prometheus for metrics storage.</div>
+        <v-checkbox v-model="form.use_clickhouse" label="使用 ClickHouse 存储指标" class="my-2" hide-details :disabled="form.global" />
+        <div class="caption mb-3">启用后，将使用 ClickHouse 代替 Prometheus 存储指标。</div>
 
         <div class="subtitle-1">Prometheus URL</div>
-        <div class="caption">Coroot works on top of the telemetry data stored in your Prometheus server.</div>
+        <div class="caption">Coroot 基于存储在 Prometheus 服务器中的遥测数据运行。</div>
         <v-text-field
             outlined
             dense
@@ -23,25 +23,25 @@
         <v-checkbox
             v-model="form.tls_skip_verify"
             :disabled="!form.url.startsWith('https') || form.global || form.use_clickhouse"
-            label="Skip TLS verify"
+            label="跳过 TLS 验证"
             hide-details
             class="my-2"
         />
 
-        <v-checkbox v-model="basic_auth" label="HTTP basic auth" class="my-2" hide-details :disabled="form.global || form.use_clickhouse" />
+        <v-checkbox v-model="basic_auth" label="HTTP 基础认证" class="my-2" hide-details :disabled="form.global || form.use_clickhouse" />
         <div v-if="basic_auth" class="d-flex gap">
             <v-text-field
                 outlined
                 dense
                 v-model="form.basic_auth.user"
-                label="username"
+                label="用户名"
                 hide-details
                 single-line
                 :disabled="form.global || form.use_clickhouse"
             />
             <v-text-field
                 v-model="form.basic_auth.password"
-                label="password"
+                label="密码"
                 type="password"
                 outlined
                 dense
@@ -51,16 +51,16 @@
             />
         </div>
 
-        <v-checkbox v-model="custom_headers" label="Custom HTTP headers" class="my-2" hide-details :disabled="form.global || form.use_clickhouse" />
+        <v-checkbox v-model="custom_headers" label="自定义 HTTP 请求头" class="my-2" hide-details :disabled="form.global || form.use_clickhouse" />
         <template v-if="custom_headers">
             <div v-for="(h, i) in form.custom_headers" :key="i" class="d-flex gap mb-2 align-center">
-                <v-text-field outlined dense v-model="h.key" label="header" hide-details single-line :disabled="form.global || form.use_clickhouse" />
+                <v-text-field outlined dense v-model="h.key" label="请求头" hide-details single-line :disabled="form.global || form.use_clickhouse" />
                 <v-text-field
                     outlined
                     dense
                     v-model="h.value"
                     type="password"
-                    label="value"
+                    label="值"
                     hide-details
                     single-line
                     :disabled="form.global || form.use_clickhouse"
@@ -70,22 +70,21 @@
                 </v-btn>
             </div>
             <v-btn color="primary" @click="form.custom_headers.push({ key: '', value: '' })" :disabled="form.global || form.use_clickhouse"
-                >Add header</v-btn
+                >添加请求头</v-btn
             >
         </template>
 
-        <div class="subtitle-1 mt-3">Refresh interval</div>
+        <div class="subtitle-1 mt-3">刷新间隔</div>
         <div class="caption">
-            How often Coroot retrieves telemetry data from a Prometheus. The value must be greater than the
+            Coroot 从 Prometheus 获取遥测数据的频率。该值必须大于 Prometheus 服务器的
             <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/" target="_blank" rel="noopener noreferrer"
                 ><var>scrape_interval</var></a
-            >
-            of the Prometheus server.
+            >。
         </div>
         <v-select v-model="form.refresh_interval" :items="refreshIntervals" outlined dense :menu-props="{ offsetY: true }" :disabled="form.global" />
 
-        <div class="subtitle-1">Extra selector</div>
-        <div class="caption">An additional metric selector that will be added to every Prometheus query (e.g. <var>{cluster="us-west-1"}</var>)</div>
+        <div class="subtitle-1">额外选择器</div>
+        <div class="caption">将添加到每个 Prometheus 查询的额外指标选择器（例如：<var>{cluster="us-west-1"}</var>）</div>
         <v-text-field
             outlined
             dense
@@ -95,10 +94,9 @@
             :disabled="form.global || form.use_clickhouse"
         />
 
-        <div class="subtitle-1">Remote Write URL</div>
+        <div class="subtitle-1">远程写入 (Remote Write) URL</div>
         <div class="caption">
-            If you're using a drop-in Prometheus replacement like VictoriaMetrics in cluster mode, you may need to configure a different Remote Write
-            URL. By default, Coroot appends <var>/api/v1/write</var> to the base URL configured above.
+            如果您在集群模式下使用 VictoriaMetrics 等 Prometheus 替代品，可能需要配置不同的远程写入 URL。默认情况下，Coroot 会在上述配置的基础 URL 后附加 <var>/api/v1/write</var>。
         </div>
         <v-text-field
             outlined
@@ -115,17 +113,17 @@
         <v-alert v-if="message" color="green" outlined text>
             {{ message }}
         </v-alert>
-        <v-btn block color="primary" @click="save" :disabled="(!valid && !form.use_clickhouse) || form.global" :loading="loading">Save</v-btn>
+        <v-btn block color="primary" @click="save" :disabled="(!valid && !form.use_clickhouse) || form.global" :loading="loading">保存</v-btn>
     </v-form>
 </template>
 
 <script>
 const refreshIntervals = [
-    { value: 5000, text: '5 seconds' },
-    { value: 10000, text: '10 seconds' },
-    { value: 15000, text: '15 seconds' },
-    { value: 30000, text: '30 seconds' },
-    { value: 60000, text: '60 seconds' },
+    { value: 5000, text: '5 秒' },
+    { value: 10000, text: '10 秒' },
+    { value: 15000, text: '15 秒' },
+    { value: 30000, text: '30 秒' },
+    { value: 60000, text: '60 秒' },
 ];
 
 export default {
@@ -209,7 +207,7 @@ export default {
                     return;
                 }
                 this.$events.emit('refresh');
-                this.message = 'Settings were successfully updated. The changes will take effect in a minute or two.';
+                this.message = '设置更新成功。更改将在一两分钟内生效。';
                 setTimeout(() => {
                     this.message = '';
                 }, 3000);

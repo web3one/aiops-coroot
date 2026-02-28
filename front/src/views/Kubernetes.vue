@@ -16,12 +16,12 @@
                         :default-filters="[{ name: 'service.name', op: '=', value: 'KubernetesEvents' }]"
                         :hidden-attributes="['service.name']"
                         :columns="[
-                            { key: 'date', label: 'Date' },
-                            { key: 'cluster', label: 'Cluster', maxWidth: 20 },
-                            { key: 'object.namespace', label: 'Namespace', maxWidth: 20 },
-                            { key: 'object.name', label: 'Object', maxWidth: 20 },
-                            { key: 'object.kind', label: 'Kind' },
-                            { key: 'message', label: 'Message' },
+                            { key: 'date', label: '日期' },
+                            { key: 'cluster', label: '集群', maxWidth: 20 },
+                            { key: 'object.namespace', label: '命名空间', maxWidth: 20 },
+                            { key: 'object.name', label: '对象', maxWidth: 20 },
+                            { key: 'object.kind', label: '类型' },
+                            { key: 'message', label: '消息' },
                         ]"
                         @loading="setLoading"
                         @error="setError"
@@ -73,9 +73,9 @@ export default {
     computed: {
         tabs() {
             let tabs = [
-                { id: undefined, name: 'Events' },
+                { id: undefined, name: '事件' },
                 { id: 'fluxcd', name: 'FluxCD' },
-                { id: 'rollouts', name: 'Rollouts' },
+                { id: 'rollouts', name: '滚动更新' },
             ];
             if (this.$api.context && this.$api.context.fluxcd === false) {
                 tabs = tabs.filter((tab) => tab.id !== 'fluxcd');

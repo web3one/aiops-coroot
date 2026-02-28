@@ -5,9 +5,9 @@
                 <Led :status="view.status" />
                 <template v-if="view.message">
                     <span v-html="view.message" />
-                    <span v-if="view.status !== 'warning'"> (<a @click="configure = true">configure</a>) </span>
+                    <span v-if="view.status !== 'warning'"> (<a @click="configure = true">配置</a>) </span>
                 </template>
-                <span v-else-if="loading">Loading...</span>
+                <span v-else-if="loading">加载中...</span>
             </div>
             <template v-if="view.heatmap">
                 <v-select
@@ -24,14 +24,14 @@
                 <template v-if="!compact">
                     <div class="grey--text my-3">
                         <v-icon size="20" style="vertical-align: baseline">mdi-lightbulb-on-outline</v-icon>
-                        Select a chart area to see traces for a specific time range, duration, or status.
+                        选择图表区域以查看特定时间范围、持续时间或状态的链路。
                     </div>
                     <div class="d-flex flex-column flex-md-row" style="gap: 8px; row-gap: 8px">
                         <v-btn depressed small color="primary" :disabled="loading" class="text-body-2" @click="setSelection('errors')">
-                            <v-icon left small class="mr-0">mdi-filter</v-icon>Show error traces
+                            <v-icon left small class="mr-0">mdi-filter</v-icon>显示错误链路
                         </v-btn>
                         <v-btn depressed small color="primary" :disabled="loading" class="text-body-2" @click="setSelection('slo violations')">
-                            <v-icon left small class="mr-0">mdi-filter</v-icon>Show latency SLO violations
+                            <v-icon left small class="mr-0">mdi-filter</v-icon>显示延迟 SLO 违规
                         </v-btn>
                     </div>
                 </template>
@@ -47,10 +47,10 @@
                     <router-link :to="{ query: setTrace({ id: '', span: '' }) }">
                         <v-icon>mdi-arrow-left</v-icon>
                     </router-link>
-                    Trace {{ trace.id }}
+                    链路 {{ trace.id }}
                 </div>
                 <v-spacer />
-                <v-btn v-if="logsLink" :to="logsLink" small color="primary"> Show logs </v-btn>
+                <v-btn v-if="logsLink" :to="logsLink" small color="primary"> 显示日志 </v-btn>
             </div>
             <v-progress-linear v-if="loading" indeterminate color="green" height="4" />
             <TracingTrace v-if="view.spans" :spans="view.spans" :span="trace.span" />
@@ -60,12 +60,12 @@
             <v-simple-table dense class="spans">
                 <thead>
                     <tr>
-                        <th>Trace ID</th>
-                        <th>Client</th>
-                        <th>Status</th>
-                        <th>Duration</th>
-                        <th>Name</th>
-                        <th>Details</th>
+                        <th>链路 ID</th>
+                        <th>客户端</th>
+                        <th>状态</th>
+                        <th>持续时间</th>
+                        <th>名称</th>
+                        <th>详情</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,26 +98,26 @@
             <div v-if="!loading && loadingError" class="pa-3 text-center red--text">
                 {{ loadingError }}
             </div>
-            <div v-else-if="!loading && (!view.spans || !view.spans.length)" class="pa-3 text-center grey--text">No traces found</div>
+            <div v-else-if="!loading && (!view.spans || !view.spans.length)" class="pa-3 text-center grey--text">未发现链路</div>
             <div v-if="view.spans && view.spans.length && view.limit" class="text-right caption grey--text">
-                The output is capped at {{ view.limit }} traces.
+                输出限制为 {{ view.limit }} 条链路。
             </div>
         </div>
 
         <v-dialog v-model="configure" max-width="800">
             <v-card class="pa-5">
                 <div class="d-flex align-center font-weight-medium mb-4">
-                    Link "{{ $utils.appId(appId).name }}" with a service
+                    将 "{{ $utils.appId(appId).name }}" 链接到服务
                     <v-spacer />
                     <v-btn icon @click="configure = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
 
-                <div class="subtitle-1">Choose a corresponding OpenTelemetry service:</div>
+                <div class="subtitle-1">选择对应的 OpenTelemetry 服务：</div>
                 <v-select v-model="form.service" :items="services" outlined dense hide-details :menu-props="{ offsetY: true }" clearable />
 
                 <div class="grey--text my-4">
-                    To configure an application to send traces follow the
-                    <a href="https://docs.coroot.com/tracing" target="_blank">documentation</a>.
+                    要配置应用发送链路，请参考
+                    <a href="https://docs.coroot.com/tracing" target="_blank">文档</a>。
                 </div>
 
                 <v-alert v-if="error" color="red" icon="mdi-alert-octagon-outline" outlined text class="my-3">
@@ -126,7 +126,7 @@
                 <v-alert v-if="message" color="green" outlined text class="my-3">
                     {{ message }}
                 </v-alert>
-                <v-btn block color="primary" @click="save" :loading="saving" :disabled="!changed" class="mt-5">Save</v-btn>
+                <v-btn block color="primary" @click="save" :loading="saving" :disabled="!changed" class="mt-5">保存</v-btn>
             </v-card>
         </v-dialog>
     </div>
@@ -284,7 +284,7 @@ export default {
             this.view.spans = [];
             this.$api.getTracing(this.appId, this.$route.query.trace, (data, error) => {
                 this.loading = false;
-                const errMsg = 'Failed to load traces';
+                const errMsg = '加载链路失败';
                 if (error) {
                     this.loadingError = error;
                     this.view.status = 'warning';
@@ -321,7 +321,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'Settings were successfully updated.';
+                this.message = '设置更新成功。';
                 this.changeSource({ type: '' });
                 setTimeout(() => {
                     this.message = '';

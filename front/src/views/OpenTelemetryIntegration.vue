@@ -7,20 +7,16 @@
         </template>
         <v-card class="pa-5">
             <div class="d-flex align-center text-h5 mb-4">
-                OpenTelemetry Integration
+                OpenTelemetry 集成
                 <v-spacer />
                 <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
             </div>
             <p>
-                <a href="https://opentelemetry.io/" target="_blank">OpenTelemetry</a> is a vendor-neutral, open-source project that provides a set of
-                APIs, SDKs, and tooling for collecting and exporting telemetry data. OpenTelemetry provides SDKs for many popular programming
-                languages and a collector that allows you to export telemetry data into to one or more open-source or commercial back-ends. Coroot can
-                serve as an OpenTelemetry backend for traces and logs. Telemetry data can be ingested directly into Coroot or through the
-                OpenTelemetry collector.
+                <a href="https://opentelemetry.io/" target="_blank">OpenTelemetry</a> 是一个厂商中立的开源项目，提供了一套用于收集和导出遥测数据的 API、SDK 和工具。OpenTelemetry 为许多流行的编程语言提供了 SDK，并提供了一个 Collector，允许您将遥测数据导出到一个或多个开源或商业后端。Coroot 可以作为 OpenTelemetry 的链路追踪 (traces) 和日志 (logs) 后端。遥测数据可以直接摄取到 Coroot 中，也可以通过 OpenTelemetry Collector 摄取。
             </p>
 
             <v-form v-model="valid">
-                <div class="subtitle-2 mt-2">Coroot URL (must be accessible by instrumented applications or the OpenTelemetry collector):</div>
+                <div class="subtitle-2 mt-2">Coroot URL (必须可由检测的应用或 OpenTelemetry Collector 访问)：</div>
                 <v-text-field
                     v-model="coroot_url"
                     :rules="[$validators.notEmpty, $validators.isUrl]"
@@ -31,9 +27,9 @@
                 />
 
                 <div class="subtitle-2 mt-2">
-                    API Key (can be managed in the
-                    <router-link :to="{ name: 'project_settings' }"><span @click="dialog = false">project settings</span></router-link
-                    >):
+                    API Key (可以在
+                    <router-link :to="{ name: 'project_settings' }"><span @click="dialog = false">项目设置</span></router-link
+                    > 中管理)：
                 </div>
                 <v-select
                     v-model="api_key"
@@ -43,11 +39,11 @@
                     dense
                     hide-details
                     :menu-props="{ offsetY: true }"
-                    :no-data-text="api_keys === 'permission denied' ? 'Only project Admins can access API keys.' : 'No keys available'"
+                    :no-data-text="api_keys === 'permission denied' ? '只有项目管理员可以访问 API Key。' : '无可用 Key'"
                 />
 
                 <template v-if="tab === 0">
-                    <div class="subtitle-2 mt-2">Service name:</div>
+                    <div class="subtitle-2 mt-2">服务名称：</div>
                     <v-text-field v-model="service_name" :rules="[$validators.notEmpty, $validators.isSlug]" placeholder="catalog" outlined dense />
                 </template>
             </v-form>
@@ -58,7 +54,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item transition="none">
-                    <p>Instrument your apps with the relevant OpenTelemetry SDK:</p>
+                    <p>使用相关的 OpenTelemetry SDK 检测您的应用：</p>
 
                     <ul class="my-2">
                         <li><a href="https://docs.coroot.com/tracing/opentelemetry-go" target="_blank">Go</a></li>
@@ -72,7 +68,7 @@
                         <li><a href="https://opentelemetry.io/docs/languages/rust/getting-started/" target="_blank">Rust</a></li>
                     </ul>
 
-                    <p>Use the following environment variables to configure the SDKs to send traces and logs directly to Coroot:</p>
+                    <p>使用以下环境变量配置 SDK 直接向 Coroot 发送链路追踪和日志：</p>
 
                     <Code :disabled="!valid">
                         <pre>
@@ -88,8 +84,7 @@ OTEL_EXPORTER_OTLP_HEADERS="x-api-key={{ api_key }}"
 
                 <v-tab-item transition="none">
                     <p>
-                        If your apps are already configured to send logs and traces to the OpenTelemetry collector, you can simply add an additional
-                        exporter to send data to Coroot using the OTLP protocol:
+                        如果您的应用已经配置为向 OpenTelemetry Collector 发送日志和链路，您只需添加一个额外的 Exporter，使用 OTLP 协议将数据发送到 Coroot：
                     </p>
 
                     <Code :disabled="!valid">

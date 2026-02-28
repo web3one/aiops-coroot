@@ -2,18 +2,18 @@
     <Views :error="error" class="traces">
         <v-alert v-if="view.message" color="info" outlined text class="message">
             <template v-if="view.message === 'not_found'">
-                This page only shows traces from OpenTelemetry integrations, not from eBPF.
+                此页面仅显示来自 OpenTelemetry 集成的链路，不包含来自 eBPF 的链路。
                 <div class="mt-2">
-                    <OpenTelemetryIntegration color="primary">Integrate OpenTelemetry</OpenTelemetryIntegration>
+                    <OpenTelemetryIntegration color="primary">集成 OpenTelemetry</OpenTelemetryIntegration>
                 </div>
             </template>
-            <template v-if="view.message === 'no_clickhouse'"> Clickhouse integration is not configured. </template>
+            <template v-if="view.message === 'no_clickhouse'"> Clickhouse 集成未配置。 </template>
         </v-alert>
 
         <template v-else>
             <div class="d-flex">
                 <v-spacer />
-                <OpenTelemetryIntegration small color="primary">Integrate OpenTelemetry</OpenTelemetryIntegration>
+                <OpenTelemetryIntegration small color="primary">集成 OpenTelemetry</OpenTelemetryIntegration>
             </div>
 
             <v-alert v-if="view.error" color="error" icon="mdi-alert-octagon-outline" outlined text class="mt-2">
@@ -31,7 +31,7 @@
 
             <v-card outlined class="query px-4 py-2 my-4">
                 <div class="mt-2 d-flex align-center" style="gap: 4px">
-                    <div>Filters:</div>
+                    <div>过滤器：</div>
                     <div class="d-flex flex-wrap align-center filters">
                         <div v-for="(f, i) in filters" class="d-flex align-center filter">
                             <template v-if="f.edit">
@@ -77,55 +77,55 @@
                 <div class="d-flex align-center">
                     <div><div class="marker selection"></div></div>
                     <div>
-                        Selection:
+                        已选择：
                         <template v-if="selectionDefined">
                             <template v-if="query.ts_from && query.ts_to">
-                                time <var> {{ format(query.ts_from, 'ts') }}</var> — <var> {{ format(query.ts_to, 'ts') }}</var>
+                                时间 <var> {{ format(query.ts_from, 'ts') }}</var> — <var> {{ format(query.ts_to, 'ts') }}</var>
                             </template>
                             <template v-if="query.dur_from !== 'inf' || query.dur_to === 'err'">
-                                where (
+                                且 (
                                 <template v-if="query.dur_from !== 'inf'">
-                                    trace duration
+                                    链路持续时间
                                     <var> {{ format(query.dur_from, 'dur') }}</var> — <var> {{ format(query.dur_to, 'dur') }}</var>
-                                    <template v-if="query.dur_to === 'err'"> or </template>
+                                    <template v-if="query.dur_to === 'err'"> 或 </template>
                                 </template>
-                                <template v-if="query.dur_to === 'err'"> trace status is <var> Error</var></template>
+                                <template v-if="query.dur_to === 'err'"> 链路状态为 <var> 错误</var></template>
                                 )
                             </template>
                             <v-tooltip bottom>
                                 <template #activator="{ on }">
                                     <v-btn :to="clearSelection()" v-on="on" x-small icon exact><v-icon small>mdi-close</v-icon></v-btn>
                                 </template>
-                                <v-card class="px-2 py-1"> clear selection </v-card>
+                                <v-card class="px-2 py-1"> 清除选择 </v-card>
                             </v-tooltip>
                         </template>
                         <span v-else class="grey--text">
-                            <template v-if="query.view === 'attributes'">select a chart area to explore trace attributes</template>
-                            <template v-else>select a chart area to see traces for a specific time range, duration, or status</template>
+                            <template v-if="query.view === 'attributes'">选择图表区域以探索链路属性</template>
+                            <template v-else>选择图表区域以查看特定时间范围、持续时间或状态的链路</template>
                         </span>
                     </div>
                 </div>
                 <div v-if="query.view === 'attributes' || query.view === 'latency'" class="d-flex align-center">
                     <div><div class="marker baseline"></div></div>
-                    Baseline: other events within the time window
+                    基准：时间窗口内的其他事件
                 </div>
                 <v-form :disabled="loading">
                     <v-checkbox
                         v-model="form.excludeAux"
-                        label="Exclude auxiliary requests (from monitoring, control plane, etc)"
+                        label="排除辅助请求（来自监控、控制平面等）"
                         dense
                         hide-details
                     />
                     <div v-if="query.view === 'latency'" class="d-flex mt-2 mb-1 align-baseline" style="gap: 8px; min-width: 0">
-                        <div>View:</div>
+                        <div>视图：</div>
                         <v-btn-toggle :value="query.diff || false" @change="setDiffMode" mandatory>
                             <v-btn :value="false" height="30">
                                 <v-icon small class="mr-1">mdi-chart-timeline</v-icon>
-                                FlameGraph
+                                火焰图
                             </v-btn>
                             <v-btn :value="true" height="30" :disabled="!selectionDefined">
                                 <v-icon small class="mr-1 mdi-flip-h">mdi-select-compare</v-icon>
-                                Diff
+                                差异对比
                             </v-btn>
                         </v-btn-toggle>
                     </div>
@@ -139,10 +139,10 @@
                         <router-link :to="openView('traces')">
                             <v-icon>mdi-arrow-left</v-icon>
                         </router-link>
-                        Trace {{ query.trace_id }}
+                        链路 {{ query.trace_id }}
                     </div>
                     <v-spacer />
-                    <v-btn v-if="logsLink" :to="logsLink" small color="primary"> Show logs </v-btn>
+                    <v-btn v-if="logsLink" :to="logsLink" small color="primary"> 显示日志 </v-btn>
                 </div>
                 <TracingTrace v-if="view.trace" :spans="view.trace" />
             </div>
@@ -157,12 +157,12 @@
                     dense
                     class="table"
                     mobile-breakpoint="0"
-                    no-data-text="No traces found"
+                    no-data-text="未发现链路"
                     :headers="[
-                        { value: 'service_name', text: 'Root Service Name', align: 'start' },
-                        { value: 'span_name', text: 'Root Span Name', align: 'start' },
-                        { value: 'total', text: 'Requests', align: 'end' },
-                        { value: 'failed', text: 'Errors', align: 'end' },
+                        { value: 'service_name', text: '根服务名称', align: 'start' },
+                        { value: 'span_name', text: '根 Span 名称', align: 'start' },
+                        { value: 'total', text: '请求', align: 'end' },
+                        { value: 'failed', text: '错误', align: 'end' },
                         { value: 'duration_quantiles[0]', text: 'p50', align: 'end' },
                         { value: 'duration_quantiles[1]', text: 'p95', align: 'end' },
                         { value: 'duration_quantiles[2]', text: 'p99', align: 'end' },
@@ -206,7 +206,7 @@
                     <template #foot>
                         <tfoot>
                             <tr v-for="item in view.summary ? [view.summary.overall] : []">
-                                <td class="font-weight-medium">OVERALL</td>
+                                <td class="font-weight-medium">总计 (OVERALL)</td>
                                 <td></td>
                                 <td class="text-right font-weight-medium">
                                     <span>{{ format(item.total) }}</span>
@@ -241,11 +241,11 @@
                 <v-simple-table dense>
                     <thead>
                         <tr>
-                            <th>Trace ID</th>
-                            <th>Root Service</th>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Duration</th>
+                            <th>链路 ID</th>
+                            <th>根服务</th>
+                            <th>名称</th>
+                            <th>状态</th>
+                            <th>持续时间</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -270,16 +270,16 @@
                         </tr>
                     </tbody>
                 </v-simple-table>
-                <div v-if="!loading && (!view.traces || !view.traces.length)" class="pa-3 text-center grey--text">No traces found</div>
+                <div v-if="!loading && (!view.traces || !view.traces.length)" class="pa-3 text-center grey--text">未发现链路</div>
                 <div v-if="!loading && view.traces && view.traces.length && view.limit" class="text-right caption grey--text">
-                    The output is capped at {{ view.limit }} traces.
+                    输出限制为 {{ view.limit }} 条链路。
                 </div>
             </div>
 
             <div v-else-if="query.view === 'attributes'">
                 <div class="d-flex grey--text mt-2 mb-3">
                     <v-icon small class="mr-1">mdi-information-outline</v-icon>
-                    This section shows how the attributes of traces in the selected area differ from those of other traces.
+                    此部分显示所选区域中的链路属性与其它链路属性的差异。
                 </div>
                 <div class="attr-stats" :style="{ gap: statsStyles.gap }">
                     <div v-for="attr in view.attr_stats" class="attr" :style="{ width: statsStyles.attrWidth }">
@@ -299,19 +299,19 @@
                                 </router-link>
                             </template>
                             <v-card class="pa-2">
-                                <div>Value:</div>
+                                <div>值：</div>
                                 <div class="font-weight-medium mb-1">{{ v.name }}</div>
                                 <div class="baseline">
                                     <span class="marker" />
-                                    Baseline: {{ v.baseline ? format(v.baseline, '%') + '%' : '—' }}
+                                    基准：{{ v.baseline ? format(v.baseline, '%') + '%' : '—' }}
                                 </div>
                                 <div class="selection">
                                     <span class="marker" />
-                                    Selection: {{ v.selection ? format(v.selection, '%') + '%' : '—' }}
+                                    已选择：{{ v.selection ? format(v.selection, '%') + '%' : '—' }}
                                 </div>
                                 <div class="d-flex grey--text mt-2">
                                     <v-icon x-small class="mr-1">mdi-information-outline</v-icon>
-                                    Click to view a sample trace containing this attribute
+                                    点击查看包含此属性的示例链路
                                 </div>
                             </v-card>
                         </v-tooltip>
@@ -322,8 +322,7 @@
             <div v-else-if="query.view === 'errors'">
                 <div class="d-flex grey--text mt-2 mb-3">
                     <v-icon small class="mr-2">mdi-information-outline</v-icon>
-                    This section highlights the underlying reasons why traces within the selected range contain errors. It identifies the tracing
-                    spans where errors originated.
+                    此部分重点介绍了所选范围内链路包含错误的原因。它识别了错误源自的链路 Span。
                 </div>
                 <v-data-table
                     :items="view.errors || []"
@@ -333,13 +332,13 @@
                     must-sort
                     class="table errors"
                     mobile-breakpoint="0"
-                    no-data-text="No errors found"
+                    no-data-text="未发现错误"
                     :headers="[
-                        { value: 'service_name', text: 'Service Name', width: '15%' },
+                        { value: 'service_name', text: '服务名称', width: '15%' },
                         { value: 'span_name', text: 'Span', width: '25%' },
-                        { value: 'sample_error', text: 'Error', width: '40%' },
-                        { value: 'sample_trace_id', text: 'Sample Trace', sortable: false, width: '16ch' },
-                        { value: 'count', text: 'Percentage', width: '16ch' },
+                        { value: 'sample_error', text: '错误', width: '40%' },
+                        { value: 'sample_trace_id', text: '示例链路', sortable: false, width: '16ch' },
+                        { value: 'count', text: '百分比', width: '16ch' },
                     ]"
                     :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100, -1] }"
                 >
@@ -383,13 +382,12 @@
             <div v-else-if="query.view === 'latency'">
                 <div class="d-flex grey--text mt-2 mb-3">
                     <v-icon small class="mr-1">mdi-information-outline</v-icon>
-                    This section shows the latency FlameGraph for the selected traces. A wider frame indicates greater time consumption by that
-                    tracing span.
+                    此部分显示了所选链路的延迟火焰图。框架越宽表示该链路 Span 的耗时越多。
                 </div>
                 <FlameGraph
                     v-if="view.latency"
                     :profile="view.latency"
-                    :actions="[{ title: 'Open a sample trace', icon: 'mdi-chart-timeline', to: (s) => openTrace(s.data['trace_id']) }]"
+                    :actions="[{ title: '打开示例链路', icon: 'mdi-chart-timeline', to: (s) => openTrace(s.data['trace_id']) }]"
                     class="pt-2"
                 />
             </div>
@@ -446,11 +444,11 @@ export default {
     computed: {
         views() {
             return [
-                { name: 'overview', title: 'overview', icon: 'mdi-format-list-checkbox' },
-                { name: 'traces', title: 'traces', icon: 'mdi-chart-timeline' },
-                { name: 'errors', title: 'error causes', icon: 'mdi-target' },
-                { name: 'latency', title: 'latency explorer', icon: 'mdi-clock-fast' },
-                { name: 'attributes', title: 'compare attributes', icon: 'mdi-select-compare' },
+                { name: 'overview', title: '概览', icon: 'mdi-format-list-checkbox' },
+                { name: 'traces', title: '链路', icon: 'mdi-chart-timeline' },
+                { name: 'errors', title: '错误原因', icon: 'mdi-target' },
+                { name: 'latency', title: '延迟分析', icon: 'mdi-clock-fast' },
+                { name: 'attributes', title: '属性对比', icon: 'mdi-select-compare' },
             ];
         },
         query() {
@@ -468,9 +466,9 @@ export default {
         filterable() {
             return {
                 fields: {
-                    ServiceName: 'Root Service Name',
-                    SpanName: 'Root Span Name',
-                    TraceId: 'Trace ID',
+                    ServiceName: '根服务名称',
+                    SpanName: '根 Span 名称',
+                    TraceId: '链路 ID',
                 },
                 ops: ['=', '!=', '~', '!~'],
             };
@@ -629,7 +627,7 @@ export default {
                     return '0';
                 }
                 if (v === 'inf' || v === 'err') {
-                    return 'Inf';
+                    return '无穷大';
                 }
                 if (v >= 1) {
                     return v + 's';

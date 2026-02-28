@@ -1,13 +1,12 @@
 <template>
     <Views :loading="loading" :error="error">
         <v-alert v-if="!loading && !error && !nodes.length" color="info" outlined text>
-            Coroot currently supports cost monitoring for services running on AWS, GCP, and Azure. The agent on each node requires access to the cloud
-            metadata service to obtain instance metadata, such as region, availability zone, and instance type.
+            Coroot 目前支持运行在 AWS、GCP 和 Azure 上的服务的成本监控。每个节点上的 agent 需要访问云元数据服务，以获取实例元数据，例如区域、可用区和实例类型。
         </v-alert>
 
         <v-alert v-if="custom_pricing" color="info" outlined text>
-            The nodes are either not in a supported cloud, or the agent cannot access cloud metadata. <br />
-            In this case, custom pricing is used, and you can adjust the prices per vCPU and per GB of memory.
+            节点要么不在支持的云平台中，要么 agent 无法访问云元数据。<br />
+            在这种情况下，将使用自定义定价，您可以调整每核 vCPU 和每 GB 内存的价格。
             <CustomCloudPricing />
         </v-alert>
 

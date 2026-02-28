@@ -1,13 +1,13 @@
 <template>
     <div style="max-width: 800px">
-        <h2 class="text-h5 mt-10 mb-5">API keys</h2>
-        <p>The API keys below authorize Coroot's agents and other applications to write telemetry data for this project.</p>
+        <h2 class="text-h5 mt-10 mb-5">API Key</h2>
+        <p>下方的 API Key 授权 Coroot 的 Agent 和其他应用为此项目写入遥测数据。</p>
         <v-simple-table dense>
             <thead>
                 <tr>
-                    <th>Description</th>
+                    <th>描述</th>
                     <th>Key</th>
-                    <th style="width: 100px">Actions</th>
+                    <th style="width: 100px">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,7 +16,7 @@
                     <td>
                         <template v-if="k.key"> {{ k.key }} <CopyButton :text="k.key" /> </template>
                         <template v-else>
-                            <span class="grey--text">Only project Admins can access API keys.</span>
+                            <span class="grey--text">只有项目管理员可以访问 API Key。</span>
                         </template>
                     </td>
                     <td>
@@ -27,25 +27,24 @@
             </tbody>
         </v-simple-table>
 
-        <v-btn color="primary" class="mt-4" small @click="open('generate', {})" :disabled="!editable">Generate API key</v-btn>
+        <v-btn color="primary" class="mt-4" small @click="open('generate', {})" :disabled="!editable">生成 API Key</v-btn>
 
         <v-dialog v-model="dialog" max-width="600">
             <v-card v-if="loading" class="pa-10">
                 <v-progress-linear indeterminate />
             </v-card>
-            <v-card v-else class="pa-4">
+            <v-card else class="pa-4">
                 <div class="d-flex align-center font-weight-bold mb-4">
-                    <div v-if="form.action === 'generate'">Generate API key</div>
-                    <div v-else-if="form.action === 'delete'">Delete API key</div>
-                    <div v-else>Edit API key</div>
+                    <div v-if="form.action === 'generate'">生成 API Key</div>
+                    <div v-else-if="form.action === 'delete'">删除 API Key</div>
+                    <div v-else>编辑 API Key</div>
                     <v-spacer />
                     <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
                 <p v-if="form.action === 'delete'">
-                    Deleting the API key can result in some agents or applications using it no longer being able to write telemetry data to this
-                    project.
+                    删除 API Key 可能会导致某些使用它的 Agent 或应用无法再向此项目写入遥测数据。
                 </p>
-                <div class="subtitle-1">Description</div>
+                <div class="subtitle-1">描述</div>
                 <v-text-field v-model="form.description" outlined dense :disabled="form.action === 'delete'"></v-text-field>
                 <v-alert v-if="error" color="red" icon="mdi-alert-octagon-outline" outlined text>
                     {{ error }}
@@ -53,10 +52,10 @@
                 <div class="d-flex align-center">
                     <v-spacer />
                     <v-btn v-if="form.action === 'generate'" color="primary" :disabled="!form.description" :loading="loading" @click="post">
-                        Generate
+                        生成
                     </v-btn>
-                    <v-btn v-else-if="form.action === 'delete'" color="error" :loading="loading" @click="post"> Delete </v-btn>
-                    <v-btn v-else color="primary" :disabled="!form.description" :loading="loading" @click="post"> Save </v-btn>
+                    <v-btn v-else-if="form.action === 'delete'" color="error" :loading="loading" @click="post"> 删除 </v-btn>
+                    <v-btn v-else color="primary" :disabled="!form.description" :loading="loading" @click="post"> 保存 </v-btn>
                 </div>
             </v-card>
         </v-dialog>

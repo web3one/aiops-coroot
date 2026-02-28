@@ -2,18 +2,18 @@
     <v-dialog v-model="dialog" persistent no-click-animation max-width="80%">
         <v-card class="pa-4">
             <div class="d-flex align-center font-weight-medium mb-2 text-h5">
-                <div class="text-capitalize">{{ action }} panel</div>
+                <div class="text-capitalize">{{ action === 'add' ? '添加' : '编辑' }}面板</div>
                 <v-spacer />
                 <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
             </div>
             <v-form v-model="valid">
                 <v-row dense>
                     <v-col cols="8">
-                        <div class="subtitle-1">Name</div>
+                        <div class="subtitle-1">名称</div>
                         <v-text-field v-model="config.name" :rules="[$validators.notEmpty]" outlined dense hide-details />
                     </v-col>
                     <v-col>
-                        <div class="subtitle-1">Group</div>
+                        <div class="subtitle-1">分组</div>
                         <v-combobox
                             v-model="panel.group"
                             :items="groups_"
@@ -29,24 +29,24 @@
                 </v-row>
                 <v-row dense class="mt-2">
                     <v-col cols="8">
-                        <div class="subtitle-1">Description</div>
+                        <div class="subtitle-1">描述</div>
                         <v-text-field v-model="config.description" outlined dense hide-details />
                     </v-col>
                     <v-col>
-                        <div class="subtitle-1">Type</div>
-                        <v-select :value="'Time series chart'" :items="['Time series chart']" outlined dense hide-details disabled />
+                        <div class="subtitle-1">类型</div>
+                        <v-select :value="'时间序列图'" :items="['时间序列图']" outlined dense hide-details disabled />
                     </v-col>
                 </v-row>
 
-                <div class="subtitle-1 mt-3">Preview</div>
+                <div class="subtitle-1 mt-3">预览</div>
                 <Panel :config="config" style="height: 240px" />
 
                 <div v-for="(_, i) in config.source.metrics.queries" class="mb-6">
-                    <div class="subtitle-1 mt-2">Query #{{ i + 1 }}</div>
+                    <div class="subtitle-1 mt-2">查询 #{{ i + 1 }}</div>
 
                     <div v-if="$api.context.multicluster" class="mb-3">
-                        <div class="subtitle-1">Data Source</div>
-                        <div class="caption">Select which cluster/project to query.</div>
+                        <div class="subtitle-1">数据源</div>
+                        <div class="caption">选择要查询的集群/项目。</div>
                         <v-select
                             v-model="config.source.metrics.queries[i].datasource"
                             :items="datasources"
@@ -54,41 +54,41 @@
                             outlined
                             dense
                             hide-details
-                            placeholder="Select data source"
+                            placeholder="选择数据源"
                         />
                     </div>
 
-                    <div class="subtitle-1 mt-2">PromQL Query</div>
-                    <div class="caption">PromQL expression.</div>
+                    <div class="subtitle-1 mt-2">PromQL 查询</div>
+                    <div class="caption">PromQL 表达式。</div>
                     <MetricSelector v-model="config.source.metrics.queries[i].query" :datasource="config.source.metrics.queries[i].datasource" />
 
-                    <div class="subtitle-1 mt-2">Legend</div>
+                    <div class="subtitle-1 mt-2">图例</div>
                     <div class="caption">
-                        Text to be displayed in the legend and the tooltip. Use <var v-pre>{{ label_name }}</var> to interpolate label values.
+                        在图例和工具提示中显示的文本。使用 <var v-pre>{{ label_name }}</var> 插值标签值。
                     </div>
                     <v-text-field v-model="config.source.metrics.queries[i].legend" outlined dense hide-details />
                 </div>
                 <v-btn color="primary" @click="addQuery()">
                     <v-icon>mdi-plus</v-icon>
-                    Add query
+                    添加查询
                 </v-btn>
 
                 <div class="d-flex align-center gap-2 mt-4">
-                    <div class="subtitle-1" style="min-width: 100px">Stack series</div>
+                    <div class="subtitle-1" style="min-width: 100px">堆叠序列</div>
                     <v-checkbox v-model="config.widget.chart.stacked" dense hide-details class="mt-0 pt-0" />
                 </div>
                 <div class="d-flex align-center gap-2 mt-2">
-                    <div class="subtitle-1" style="min-width: 100px">Display</div>
+                    <div class="subtitle-1" style="min-width: 100px">显示</div>
                     <v-btn-toggle v-model="config.widget.chart.display" dense mandatory>
-                        <v-btn value="line">Line</v-btn>
-                        <v-btn value="bar">Bar</v-btn>
+                        <v-btn value="line">折线</v-btn>
+                        <v-btn value="bar">柱状</v-btn>
                     </v-btn-toggle>
                 </div>
             </v-form>
             <div class="d-flex gap-1">
                 <v-spacer />
-                <v-btn color="primary" @click="apply" :disabled="!valid">Apply</v-btn>
-                <v-btn color="primary" outlined @click="dialog = false">Cancel</v-btn>
+                <v-btn color="primary" @click="apply" :disabled="!valid">应用</v-btn>
+                <v-btn color="primary" outlined @click="dialog = false">取消</v-btn>
             </div>
         </v-card>
     </v-dialog>
@@ -150,7 +150,7 @@ export default {
             if (!this.search || this.groups.includes(this.search)) {
                 return groups;
             }
-            return [{ value: this.search, text: this.search + ' (add new)' }, ...this.groups];
+            return [{ value: this.search, text: this.search + ' (添加新组)' }, ...this.groups];
         },
         config() {
             return this.panel.config;

@@ -12,7 +12,7 @@
             :items-per-page="100"
             :items="nodes_"
             item-key="item"
-            no-data-text="No nodes found"
+            no-data-text="未发现节点"
             :headers="headers"
             :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, 100, -1] }"
         >
@@ -105,7 +105,7 @@
         </v-data-table>
 
         <div class="mt-4">
-            <AgentInstallation color="primary">Add nodes</AgentInstallation>
+            <AgentInstallation color="primary">添加节点</AgentInstallation>
         </div>
     </Views>
 </template>
@@ -130,16 +130,16 @@ export default {
     computed: {
         headers() {
             let headers = [
-                { value: 'name', text: 'Name', align: 'left' },
-                { value: 'status', text: 'Status', align: 'left' },
-                { value: 'compute', text: 'Compute', align: 'left', sortable: false },
-                { value: 'availability_zone', text: 'Availability zone', align: 'left' },
-                { value: 'ips', text: 'IP', align: 'left', sortable: false },
+                { value: 'name', text: '名称', align: 'left' },
+                { value: 'status', text: '状态', align: 'left' },
+                { value: 'compute', text: '计算资源', align: 'left', sortable: false },
+                { value: 'availability_zone', text: '可用区', align: 'left' },
+                { value: 'ips', text: 'IP 地址', align: 'left', sortable: false },
                 { value: 'cpu_percent', text: 'CPU', align: 'left' },
-                { value: 'memory_percent', text: 'Memory', align: 'left' },
+                { value: 'memory_percent', text: '内存', align: 'left' },
                 { value: 'gpus', text: 'GPU', align: 'left' },
-                { value: 'total_network_bandwidth', text: 'Network', align: 'left' },
-                { value: 'cluster', text: 'Cluster', align: 'left' },
+                { value: 'total_network_bandwidth', text: '网络', align: 'left' },
+                { value: 'cluster', text: '集群', align: 'left' },
             ];
             if (!this.$api.context.multicluster) {
                 return headers.filter((h) => h.value !== 'cluster');

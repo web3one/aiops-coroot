@@ -8,7 +8,7 @@
             <v-tabs v-if="app.reports && app.reports.length" height="40" show-arrows slider-size="2" class="mt-3">
                 <v-tab v-for="r in app.reports" :key="r.name" :to="{ params: { report: r.name }, query: $utils.contextQuery() }" exact-path>
                     <Led v-if="r && (r.checks || r.instrumentation)" :status="r.status" />
-                    {{ r.name }}
+                    {{ { SLO: 'SLO', Instances: '实例', CPU: 'CPU', Memory: '内存', Storage: '存储', Net: '网络', DNS: 'DNS', Logs: '日志', Tracing: '链路追踪', Profiling: '性能分析' }[r.name] || r.name }}
                 </v-tab>
             </v-tabs>
 

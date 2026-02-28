@@ -3,7 +3,7 @@
         <v-card class="pa-5">
             <div class="d-flex align-center font-weight-medium mb-4">
                 <div>
-                    {{ value === 'view' ? 'View' : 'Configure' }} {{ title }} integration
+                    {{ value === 'view' ? '查看' : '配置' }} {{ title }} 集成
                     <a :href="`https://docs.coroot.com/alerting/${type}`" target="_blank">
                         <v-icon>mdi-information-outline</v-icon>
                     </a>
@@ -27,13 +27,13 @@
                 </v-alert>
                 <div class="d-flex align-center">
                     <v-spacer />
-                    <v-btn v-if="value === 'del'" @click="del" color="error" :loading="saving">Delete</v-btn>
+                    <v-btn v-if="value === 'del'" @click="del" color="error" :loading="saving">删除</v-btn>
                     <template v-else-if="value === 'view'">
-                        <v-btn @click="test" color="secondary" :loading="testing">Send test alert</v-btn>
+                        <v-btn @click="test" color="secondary" :loading="testing">发送测试告警</v-btn>
                     </template>
                     <template v-else>
-                        <v-btn @click="test" color="secondary" :disabled="!valid" :loading="testing" class="mr-4">Send test alert</v-btn>
-                        <v-btn @click="save" color="primary" :disabled="!valid" :loading="saving">Save</v-btn>
+                        <v-btn @click="test" color="secondary" :disabled="!valid" :loading="testing" class="mr-4">发送测试告警</v-btn>
+                        <v-btn @click="save" color="primary" :disabled="!valid" :loading="saving">保存</v-btn>
                     </template>
                 </div>
             </v-form>
@@ -107,7 +107,7 @@ export default {
                     return;
                 }
                 this.$events.emit('refresh');
-                this.message = 'Settings were successfully updated.';
+                this.message = '设置更新成功。';
                 setTimeout(() => {
                     this.message = '';
                 }, 1000);
@@ -137,7 +137,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'A test alert has been successfully sent.';
+                this.message = '测试告警已成功发送。';
                 setTimeout(() => {
                     this.message = '';
                 }, 3000);

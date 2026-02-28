@@ -59,9 +59,9 @@ export default {
     computed: {
         tabs() {
             return [
-                { id: undefined, name: 'Alerts' },
-                { id: 'rules', name: 'Alerting Rules' },
-                { id: 'inspections', name: 'Inspections' },
+                { id: undefined, name: '告警' },
+                { id: 'rules', name: '告警规则' },
+                { id: 'inspections', name: '检查项' },
             ];
         },
     },

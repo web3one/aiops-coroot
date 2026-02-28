@@ -7,18 +7,16 @@
         </template>
         <v-card class="pa-5">
             <div class="d-flex align-center text-h5 mb-4">
-                Node agent installation
+                节点 Agent 安装
                 <v-spacer />
                 <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
             </div>
             <p>
-                <a href="https://github.com/coroot/coroot-node-agent" target="_blank">Coroot-node-agent</a> gathers metrics, traces, logs, and
-                profiles, and sends them to Coroot. To ingest telemetry data, the agent must have the address of the Coroot instance and the
-                capability to establish TCP connections with it.
+                <a href="https://github.com/coroot/coroot-node-agent" target="_blank">Coroot-node-agent</a> 收集指标、追踪、日志和性能分析 (profiles)，并将其发送到 Coroot。为了摄取遥测数据，Agent 必须拥有 Coroot 实例的地址，并且能够与之建立 TCP 连接。
             </p>
 
             <v-form v-model="valid">
-                <div class="subtitle-1">Coroot URL:</div>
+                <div class="subtitle-1">Coroot URL：</div>
                 <v-text-field
                     v-model="coroot_url"
                     :rules="[$validators.notEmpty, $validators.isUrl]"
@@ -27,9 +25,9 @@
                     dense
                 />
                 <div class="subtitle-1">
-                    API Key (can be managed in the
-                    <router-link :to="{ name: 'project_settings' }"><span @click="dialog = false">project settings</span></router-link
-                    >):
+                    API Key (可以在
+                    <router-link :to="{ name: 'project_settings' }"><span @click="dialog = false">项目设置</span></router-link
+                    > 中管理)：
                 </div>
                 <v-select
                     v-model="api_key"
@@ -38,20 +36,19 @@
                     outlined
                     dense
                     :menu-props="{ offsetY: true }"
-                    :no-data-text="api_keys === 'permission denied' ? 'Only project Admins can access API keys.' : 'No keys available'"
+                    :no-data-text="api_keys === 'permission denied' ? '只有项目管理员可以访问 API Key。' : '无可用 Key'"
                 />
             </v-form>
 
             <v-tabs v-model="tab" height="40" slider-size="2" class="mb-4">
-                <v-tab><v-icon class="mr-1">mdi-memory</v-icon>Linux node (Systemd)</v-tab>
+                <v-tab><v-icon class="mr-1">mdi-memory</v-icon>Linux 节点 (Systemd)</v-tab>
                 <v-tab><v-icon class="mr-1">mdi-docker</v-icon>Docker</v-tab>
                 <v-tab><v-icon class="mr-1">mdi-kubernetes</v-icon>Kubernetes</v-tab>
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item transition="none">
                     <p>
-                        This script downloads the latest version of the agent and installs it as a Systemd service. Additionally, it generates an
-                        uninstall script.
+                        此脚本将下载最新版本的 Agent 并将其作为 Systemd 服务安装。此外，它还会生成一个卸载脚本。
                     </p>
                     <Code :disabled="!valid">
                         <pre>
@@ -62,13 +59,13 @@ curl -sfL https://raw.githubusercontent.com/coroot/coroot-node-agent/main/instal
   sh -
                         </pre>
                     </Code>
-                    <p>You can read the agent log using the <var>journalctl</var> command:</p>
+                    <p>您可以使用 <var>journalctl</var> 命令读取 Agent 日志：</p>
                     <Code>
                         <pre>
 sudo journalctl -u coroot-node-agent
                         </pre>
                     </Code>
-                    <p>To uninstall the agent run the command below:</p>
+                    <p>要卸载 Agent，请运行以下命令：</p>
                     <Code>
                         <pre>
 /usr/bin/coroot-node-agent-uninstall.sh
@@ -91,13 +88,13 @@ docker run --detach --name coroot-node-agent \
   --scrape-interval={{ scrape_interval }}
                         </pre>
                     </Code>
-                    <p>To read the agent log:</p>
+                    <p>读取 Agent 日志：</p>
                     <Code>
                         <pre>
 docker logs coroot-node-agent
                         </pre>
                     </Code>
-                    <p>To uninstall the agent run the command below:</p>
+                    <p>要卸载 Agent，请运行以下命令：</p>
                     <Code>
                         <pre>
 docker rm -f coroot-node-agent
@@ -105,7 +102,7 @@ docker rm -f coroot-node-agent
                     </Code>
                 </v-tab-item>
                 <v-tab-item transition="none">
-                    <p>Add the Coroot helm chart repo:</p>
+                    <p>添加 Coroot Helm Chart 仓库：</p>
 
                     <Code>
                         <pre>
@@ -114,7 +111,7 @@ helm repo update coroot
                         </pre>
                     </Code>
 
-                    <p>Next, install the Coroot Operator:</p>
+                    <p>接下来，安装 Coroot Operator：</p>
 
                     <Code>
                         <pre>
@@ -122,7 +119,7 @@ helm install -n coroot --create-namespace coroot-operator coroot/coroot-operator
                         </pre>
                     </Code>
 
-                    <p>Install Coroot's agents (node-agent and cluster-agent):</p>
+                    <p>安装 Coroot 的 Agent (node-agent 和 cluster-agent)：</p>
 
                     <Code :disabled="!valid">
                         <pre>

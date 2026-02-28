@@ -15,7 +15,7 @@
             mobile-breakpoint="0"
             :items-per-page="50"
             :items="items"
-            no-data-text="No applications found"
+            no-data-text="未发现应用"
             :headers="headers"
             :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100, -1] }"
         >
@@ -101,11 +101,11 @@ import AppIcon from '../components/AppIcon.vue';
 import Views from '@/views/Views.vue';
 
 const statuses = {
-    critical: { name: 'SLO violation', color: 'red lighten-1' },
-    warning: { name: 'Warning', color: 'orange lighten-1' },
-    info: { name: 'Errors in logs', color: 'blue lighten-1' },
-    unknown: { name: 'Integration required', color: 'purple lighten-1' },
-    ok: { name: 'OK', color: 'green lighten-1' },
+    critical: { name: 'SLO 违规', color: 'red lighten-1' },
+    warning: { name: '警告', color: 'orange lighten-1' },
+    info: { name: '日志错误', color: 'blue lighten-1' },
+    unknown: { name: '需要集成', color: 'purple lighten-1' },
+    ok: { name: '正常', color: 'green lighten-1' },
 };
 
 export default {
@@ -128,21 +128,21 @@ export default {
     computed: {
         headers() {
             let headers = [
-                { value: 'application', text: 'Application', sortable: false },
-                { value: 'cluster', text: 'Cluster', sortable: false },
-                { value: 'type', text: 'Type', sortable: false },
-                { value: 'errors', text: 'Errors', sortable: false, align: 'end' },
-                { value: 'latency', text: 'Latency', sortable: false, align: 'end' },
-                { value: 'upstreams', text: 'Upstreams', sortable: false, align: 'end' },
-                { value: 'instances', text: 'Instances', sortable: false, align: 'end' },
-                { value: 'restarts', text: 'Restarts', sortable: false, align: 'end' },
+                { value: 'application', text: '应用', sortable: false },
+                { value: 'cluster', text: '集群', sortable: false },
+                { value: 'type', text: '类型', sortable: false },
+                { value: 'errors', text: '错误', sortable: false, align: 'end' },
+                { value: 'latency', text: '延迟', sortable: false, align: 'end' },
+                { value: 'upstreams', text: '上游', sortable: false, align: 'end' },
+                { value: 'instances', text: '实例', sortable: false, align: 'end' },
+                { value: 'restarts', text: '重启', sortable: false, align: 'end' },
                 { value: 'cpu', text: 'CPU', sortable: false, align: 'end' },
-                { value: 'memory', text: 'Mem', sortable: false, align: 'end' },
-                { value: 'disk_io_load', text: 'I/O load', sortable: false, align: 'end' },
-                { value: 'disk_usage', text: 'Disk', sortable: false, align: 'end' },
-                { value: 'network', text: 'Net', sortable: false, align: 'end' },
+                { value: 'memory', text: '内存', sortable: false, align: 'end' },
+                { value: 'disk_io_load', text: 'I/O 负载', sortable: false, align: 'end' },
+                { value: 'disk_usage', text: '磁盘', sortable: false, align: 'end' },
+                { value: 'network', text: '网络', sortable: false, align: 'end' },
                 { value: 'dns', text: 'DNS', sortable: false, align: 'end' },
-                { value: 'logs', text: 'Logs', sortable: false, align: 'center' },
+                { value: 'logs', text: '日志', sortable: false, align: 'center' },
             ];
             if (!this.$api.context.multicluster) {
                 return headers.filter((h) => h.value !== 'cluster');

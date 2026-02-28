@@ -8,7 +8,7 @@
                 <div class="label">{{ s.name }}</div>
             </div>
             <v-checkbox
-                label="Show resolved"
+                label="显示已解决"
                 :value="showResolved"
                 @change="changeShowResolved"
                 class="font-weight-regular mt-0 pt-0 ml-2"
@@ -29,15 +29,15 @@
             sort-by="opened_at"
             sort-desc
             must-sort
-            no-data-text="No incidents found"
+            no-data-text="未发现故障"
             :headers="[
-                { value: 'incident', text: 'Incident', sortable: false },
-                { value: 'application', text: 'Application', sortable: false },
-                { value: 'description', text: 'Description', sortable: false },
-                { value: 'rca', text: 'Root Cause', sortable: false },
-                { value: 'impact', text: 'Impacted requests', sortable: true },
-                { value: 'opened_at', text: 'Opened at', sortable: true },
-                { value: 'duration', text: 'Duration', sortable: true },
+                { value: 'incident', text: '故障', sortable: false },
+                { value: 'application', text: '应用', sortable: false },
+                { value: 'description', text: '描述', sortable: false },
+                { value: 'rca', text: '根本原因', sortable: false },
+                { value: 'impact', text: '受影响的请求', sortable: true },
+                { value: 'opened_at', text: '开始于', sortable: true },
+                { value: 'duration', text: '持续时间', sortable: true },
                 { value: 'actions', text: '', sortable: false, align: 'end', width: '20px' },
             ]"
             :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100] }"
@@ -45,7 +45,7 @@
         >
             <template #header.rca>
                 <div class="d-flex align-center gap-1">
-                    Root Cause
+                    根本原因
                     <a href="https://docs.coroot.com/ai/overview" target="_blank">
                         <v-icon small>mdi-information-outline</v-icon>
                     </a>
@@ -63,7 +63,7 @@
             <template #item.opened_at="{ item }">
                 <div class="d-flex text-no-wrap" :class="{ 'grey--text': item.resolved_at }">
                     {{ $format.date(item.opened_at, '{MMM} {DD}, {HH}:{mm}:{ss}') }}
-                    ({{ $format.timeSinceNow(item.opened_at) }} ago)
+                    ({{ $format.timeSinceNow(item.opened_at) }} 前)
                 </div>
             </template>
 
@@ -113,11 +113,11 @@
                     </template>
 
                     <v-list dense>
-                        <v-list-item @click="edit(item.application_id, 'SLOAvailability', 'Availability')">
-                            <v-icon small class="mr-1">mdi-check-circle-outline</v-icon> Adjust Availability SLO
+                        <v-list-item @click="edit(item.application_id, 'SLOAvailability', '可用性')">
+                            <v-icon small class="mr-1">mdi-check-circle-outline</v-icon> 调整可用性 SLO
                         </v-list-item>
-                        <v-list-item @click="edit(item.application_id, 'SLOLatency', 'Latency')">
-                            <v-icon small class="mr-1">mdi-timer-outline</v-icon> Adjust Latency SLO
+                        <v-list-item @click="edit(item.application_id, 'SLOLatency', '延迟')">
+                            <v-icon small class="mr-1">mdi-timer-outline</v-icon> 调整延迟 SLO
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -132,9 +132,9 @@ import ApplicationFilter from '../components/ApplicationFilter.vue';
 import CheckForm from '@/components/CheckForm.vue';
 
 const statuses = {
-    critical: { name: 'Critical', color: 'red lighten-1' },
-    warning: { name: 'Warning', color: 'orange lighten-1' },
-    ok: { name: 'Resolved', color: 'grey lighten-1' },
+    critical: { name: '严重', color: 'red lighten-1' },
+    warning: { name: '警告', color: 'orange lighten-1' },
+    ok: { name: '已解决', color: 'grey lighten-1' },
 };
 
 export default {

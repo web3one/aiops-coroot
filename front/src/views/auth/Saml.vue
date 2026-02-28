@@ -4,15 +4,15 @@
             <v-icon>mdi-information-outline</v-icon>
         </a>
         <div v-if="error === 'configuration'">
-            <div>Your SAML integration appears to be improperly configured.</div>
+            <div>您的 SAML 集成似乎配置不当。</div>
             <div>
-                Coroot expects to receive the following attributes from your Identity Provider: <b>Email</b>, <b>FirstName</b>, and <b>LastName</b>.
+                Coroot 需要从您的身份提供商接收以下属性：<b>Email</b>、<b>FirstName</b> 和 <b>LastName</b>。
             </div>
         </div>
-        <div v-else>Authentication using SAML integration was unsuccessful.</div>
+        <div v-else>使用 SAML 集成进行的身份验证不成功。</div>
         <div class="mt-2 d-flex" style="gap: 8px">
-            <v-btn :to="{ name: 'index' }" color="primary">Refresh</v-btn>
-            <v-btn :to="{ name: 'login' }" color="warning">Login as Admin</v-btn>
+            <v-btn :to="{ name: 'index' }" color="primary">刷新</v-btn>
+            <v-btn :to="{ name: 'login' }" color="warning">以管理员身份登录</v-btn>
         </div>
     </v-alert>
 </template>

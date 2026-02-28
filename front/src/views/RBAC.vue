@@ -4,15 +4,15 @@
             {{ error }}
         </v-alert>
         <v-alert v-if="disabled" color="info" outlined text>
-            Coroot Community Edition includes three predefined roles: Admin, Editor, and Viewer.
+            Coroot 社区版包含三个预定义角色：管理员 (Admin)、编辑者 (Editor) 和查看者 (Viewer)。
             <br />
-            For more granular Role-Based Access Control (RBAC), upgrade to Coroot Enterprise (from $1 per CPU core/month).
-            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">Start</a> your free trial today.
+            如需更精细的角色访问控制 (RBAC)，请升级到 Coroot 企业版（起价为每月每 CPU 核心 1 美元）。
+            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">立即开始</a> 您的免费试用。
         </v-alert>
         <v-simple-table v-if="!error" dense class="table mt-5">
             <thead>
                 <tr>
-                    <th>Action</th>
+                    <th>操作</th>
                     <th v-for="r in roles">
                         <div class="d-flex">
                             <div>
@@ -44,8 +44,8 @@
                 </tr>
             </tbody>
         </v-simple-table>
-        <v-btn v-if="!error" color="primary" @click="add()" small :disabled="disabled" class="mt-3">Add role</v-btn>
-        <div v-if="disabled" class="mt-2 grey--text">* - examples of fine-grained custom roles</div>
+        <v-btn v-if="!error" color="primary" @click="add()" small :disabled="disabled" class="mt-3">添加角色</v-btn>
+        <div v-if="disabled" class="mt-2 grey--text">* - 细粒度自定义角色示例</div>
 
         <v-dialog v-model="form.active" max-width="800">
             <v-card class="pa-4">
@@ -58,15 +58,15 @@
                     <v-btn icon @click="form.active = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
                 <v-form v-model="form.valid" :disabled="disabled" ref="form" class="form">
-                    <div class="font-weight-medium">Name</div>
+                    <div class="font-weight-medium">名称</div>
                     <v-text-field v-model="form.name" outlined dense :rules="[$validators.notEmpty]" />
-                    <div class="font-weight-medium">Permission policies</div>
+                    <div class="font-weight-medium">权限策略</div>
                     <v-simple-table dense class="mb-4 mt-2">
                         <thead>
                             <tr>
-                                <th style="width: 40%">Scope</th>
-                                <th style="width: 15%">Action</th>
-                                <th>Object</th>
+                                <th style="width: 40%">范围</th>
+                                <th style="width: 15%">操作</th>
+                                <th>对象</th>
                                 <th style="width: 5%"></th>
                             </tr>
                         </thead>
@@ -112,24 +112,24 @@
                                 :disabled="disabled"
                                 @click="form.permissions.push({ scope: '', action: '', object: '' })"
                             >
-                                Add policy
+                                添加策略
                             </v-btn>
                         </tfoot>
                     </v-simple-table>
                     <div v-if="disabled" class="mb-2 caption grey--text">
-                        This form is disabled because adjusting role permissions is not supported in the Coroot Community Edition.
+                        此表单已禁用，因为 Coroot 社区版不支持调整角色权限。
                     </div>
                     <v-alert v-if="form.error" color="red" icon="mdi-alert-octagon-outline" outlined text>{{ form.error }}</v-alert>
                     <v-alert v-if="form.message" color="green" outlined text>{{ form.message }}</v-alert>
                     <div class="d-flex align-center">
                         <v-spacer />
                         <template v-if="form.action === 'delete'">
-                            <div>Are you sure you want to delete the role?</div>
-                            <v-btn color="error" :disabled="disabled" @click="post" :loading="form.loading" small class="ml-2">Delete</v-btn>
-                            <v-btn color="info" @click="form.action = 'edit'" small class="ml-2">Cancel</v-btn>
+                            <div>您确定要删除该角色吗？</div>
+                            <v-btn color="error" :disabled="disabled" @click="post" :loading="form.loading" small class="ml-2">删除</v-btn>
+                            <v-btn color="info" @click="form.action = 'edit'" small class="ml-2">取消</v-btn>
                         </template>
                         <template v-else>
-                            <v-btn color="primary" :disabled="disabled || !form.valid" @click="post" :loading="form.loading">Save</v-btn>
+                            <v-btn color="primary" :disabled="disabled || !form.valid" @click="post" :loading="form.loading">保存</v-btn>
                         </template>
                     </div>
                 </v-form>
@@ -201,7 +201,7 @@ export default {
             this.form.message = '';
             this.form.error = '';
             this.form.active = true;
-            this.form.title = 'Add role';
+            this.form.title = '添加角色';
             this.form.action = 'add';
             this.form.name = '';
             this.form.permissions = [{ scope: '', action: '', object: '' }];
@@ -211,7 +211,7 @@ export default {
             this.form.message = '';
             this.form.error = '';
             this.form.active = true;
-            this.form.title = 'Edit role';
+            this.form.title = '编辑角色';
             this.form.action = 'edit';
             this.form.id = role.name;
             this.form.name = role.name;

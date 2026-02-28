@@ -5,7 +5,7 @@
         <ApplicationFilter v-else :applications="applications" :autoSelectNamespaceThreshold="maxApplications" @filter="setFilter" class="mb-4" />
 
         <div v-if="tooManyApplications" class="text-center red--text mt-5">
-            Too many applications ({{ tooManyApplications }}) to render. Please choose a different category or namespace.
+            应用数量过多 ({{ tooManyApplications }})，无法渲染。请选择不同的分类或命名空间。
         </div>
 
         <div class="applications" v-on-resize="calc" @scroll="calc">

@@ -15,12 +15,12 @@
             </v-list-item>
             <v-divider />
             <v-form class="pa-2" @submit.prevent="apply">
-                <div class="mx-2 mb-2">Custom range:</div>
+                <div class="mx-2 mb-2">自定义范围:</div>
                 <v-text-field
                     v-model="from"
                     outlined
                     dense
-                    label="From"
+                    label="开始时间"
                     class="mb-2"
                     hide-details
                     append-icon="mdi-calendar-month-outline"
@@ -30,7 +30,7 @@
                     v-model="to"
                     outlined
                     dense
-                    label="To"
+                    label="结束时间"
                     class="mb-3"
                     hide-details
                     append-icon="mdi-calendar-month-outline"
@@ -38,7 +38,7 @@
                 />
                 <div v-if="!picker" class="d-flex">
                     <v-spacer />
-                    <v-btn small color="primary" :disabled="!valid" type="submit" @click="apply">Apply</v-btn>
+                    <v-btn small color="primary" :disabled="!valid" type="submit" @click="apply">应用</v-btn>
                 </div>
             </v-form>
             <v-date-picker v-if="picker" v-model="dates" @change="change" no-title range dark color="currentColor" class="picker" />
@@ -123,24 +123,24 @@ export default {
         },
         intervals() {
             const intervals = [
-                { text: 'last 5 minutes', query: { from: 'now-5m' } },
-                { text: 'last 15 minutes', query: { from: 'now-15m' } },
-                { text: 'last 30 minutes', query: { from: 'now-30m' } },
-                { text: 'last hour', query: {} },
-                { text: 'last 3 hours', query: { from: 'now-3h' } },
-                { text: 'last 12 hours', query: { from: 'now-12h' } },
-                { text: 'last day', query: { from: 'now-1d' } },
-                { text: 'last 3 days', query: { from: 'now-3d' } },
-                { text: 'last week', query: { from: 'now-7d' } },
+                { text: '最近 5 分钟', query: { from: 'now-5m' } },
+                { text: '最近 15 分钟', query: { from: 'now-15m' } },
+                { text: '最近 30 分钟', query: { from: 'now-30m' } },
+                { text: '最近 1 小时', query: {} },
+                { text: '最近 3 小时', query: { from: 'now-3h' } },
+                { text: '最近 12 小时', query: { from: 'now-12h' } },
+                { text: '最近 1 天', query: { from: 'now-1d' } },
+                { text: '最近 3 天', query: { from: 'now-3d' } },
+                { text: '最近 1 周', query: { from: 'now-7d' } },
             ];
             const incident = this.$route.query.incident;
             if (incident) {
-                intervals.unshift({ text: 'incident: ' + incident, query: { incident }, active: true });
+                intervals.unshift({ text: '故障: ' + incident, query: { incident }, active: true });
                 return intervals;
             }
             const alert = this.$route.query.alert;
             if (alert) {
-                intervals.unshift({ text: 'alert: ' + alert, query: { alert }, active: true });
+                intervals.unshift({ text: '告警: ' + alert, query: { alert }, active: true });
                 return intervals;
             }
             const from = this.$route.query.from;
@@ -155,7 +155,7 @@ export default {
             const iTo = parseInt(to);
             const f = isNaN(iFrom) ? from : this.$format.date(iFrom, fmt);
             const t = isNaN(iTo) ? to : this.$format.date(iTo, fmt);
-            intervals.unshift({ text: (f || '') + ' to ' + (t || 'now'), query: { from, to }, active: true });
+            intervals.unshift({ text: (f || '') + ' 至 ' + (t || '现在'), query: { from, to }, active: true });
             return intervals;
         },
     },

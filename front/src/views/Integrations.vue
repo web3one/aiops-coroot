@@ -7,25 +7,25 @@
             {{ message }}
         </v-alert>
         <v-alert v-if="readonly" color="primary" outlined text>
-            Notification settings are defined through the config and cannot be modified via the UI.
+            通知设置通过配置文件定义，无法通过 UI 修改。
         </v-alert>
         <v-form :disabled="readonly">
-            <div class="subtitle-1">Base url</div>
-            <div class="caption">This URL is used for things like creating links in alerts.</div>
+            <div class="subtitle-1">基础 URL</div>
+            <div class="caption">此 URL 用于在告警中创建链接等操作。</div>
             <div class="d-flex">
                 <v-text-field v-model="form.base_url" :rules="[$validators.isUrl]" outlined dense />
-                <v-btn @click="save" color="primary" :loading="saving" :disabled="readonly" class="ml-2" height="38">Save</v-btn>
+                <v-btn @click="save" color="primary" :loading="saving" :disabled="readonly" class="ml-2" height="38">保存</v-btn>
             </div>
         </v-form>
 
         <v-simple-table>
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Notify of incidents</th>
-                    <th>Notify of deployments</th>
-                    <th>Notify of alerts</th>
-                    <th>Actions</th>
+                    <th>类型</th>
+                    <th>通知故障</th>
+                    <th>通知部署</th>
+                    <th>通知告警</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,7 +50,7 @@
                         </v-icon>
                     </td>
                     <td>
-                        <v-btn v-if="!i.configured" :disabled="readonly" small @click="open(i, 'new')" color="primary">Configure</v-btn>
+                        <v-btn v-if="!i.configured" :disabled="readonly" small @click="open(i, 'new')" color="primary">配置</v-btn>
                         <div v-else class="d-flex">
                             <v-btn icon small @click="open(i, readonly ? 'view' : 'edit')">
                                 <v-icon small>{{ readonly ? 'mdi-eye' : 'mdi-pencil' }}</v-icon>
@@ -138,7 +138,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'Settings were successfully updated.';
+                this.message = '设置更新成功。';
                 setTimeout(() => {
                     this.message = '';
                 }, 1000);

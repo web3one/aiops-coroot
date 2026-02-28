@@ -6,10 +6,10 @@
                 <template v-if="view.message">
                     <span v-html="view.message" />
                     <span v-if="view.status !== 'warning' && view.services && view.services.length">
-                        (<a @click="configure = true">configure</a>)
+                        (<a @click="configure = true">配置</a>)
                     </span>
                 </template>
-                <span v-else>Loading...</span>
+                <span v-else>加载中...</span>
             </div>
             <v-select
                 v-if="view.profiles"
@@ -24,7 +24,7 @@
             />
             <div v-if="view.chart" class="grey--text mt-3">
                 <v-icon size="20" style="vertical-align: baseline">mdi-lightbulb-on-outline</v-icon>
-                Select a chart area to zoom in or compare with the previous period
+                选择图表区域以放大或与上一周期进行对比
             </div>
             <v-progress-linear v-if="loading" indeterminate height="4" style="position: absolute; bottom: 0; left: 0" />
         </v-card>
@@ -49,17 +49,17 @@
         <v-dialog v-model="configure" max-width="800">
             <v-card class="pa-5">
                 <div class="d-flex align-center font-weight-medium mb-4">
-                    Link "{{ $utils.appId(appId).name }}" with an application
+                    将 "{{ $utils.appId(appId).name }}" 链接到应用
                     <v-spacer />
                     <v-btn icon @click="configure = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
 
-                <div class="subtitle-1">Choose a corresponding application:</div>
+                <div class="subtitle-1">选择对应的应用：</div>
                 <v-select v-model="form.service" :items="services" outlined dense hide-details :menu-props="{ offsetY: true }" clearable />
 
                 <div class="grey--text my-4">
-                    To configure an application to send profiles follow the
-                    <a href="https://docs.coroot.com/profiling" target="_blank">documentation</a>.
+                    要配置应用发送性能分析 (profiles)，请参考
+                    <a href="https://docs.coroot.com/profiling" target="_blank">文档</a>。
                 </div>
 
                 <v-alert v-if="error" color="red" icon="mdi-alert-octagon-outline" outlined text class="my-3">
@@ -68,7 +68,7 @@
                 <v-alert v-if="message" color="green" outlined text class="my-3">
                     {{ message }}
                 </v-alert>
-                <v-btn block color="primary" @click="save" :loading="saving" :disabled="!changed" class="mt-5">Save</v-btn>
+                <v-btn block color="primary" @click="save" :loading="saving" :disabled="!changed" class="mt-5">保存</v-btn>
             </v-card>
         </v-dialog>
     </div>
@@ -186,7 +186,7 @@ export default {
                     this.error = error;
                     return;
                 }
-                this.message = 'Settings were successfully updated.';
+                this.message = '设置更新成功。';
                 setTimeout(() => {
                     this.message = '';
                     this.configure = false;

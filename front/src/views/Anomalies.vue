@@ -11,15 +11,15 @@
             sort-by="application"
             sort-desc
             must-sort
-            no-data-text="No applications found"
+            no-data-text="未发现应用"
             ref="table"
             v-on-resize="calcWidth"
             :headers="[
-                { value: 'application', text: 'Application', sortable: false },
-                { value: 'requests', text: 'Requests', sortable: false },
-                { value: 'latency', text: 'Latency', sortable: false, width: this.sparklineWidthPercent + '%' },
-                { value: 'errors', text: 'Errors', sortable: false, width: this.sparklineWidthPercent + '%' },
-                { value: 'incident', text: 'Incident', sortable: false, width: '14ch' },
+                { value: 'application', text: '应用', sortable: false },
+                { value: 'requests', text: '请求', sortable: false },
+                { value: 'latency', text: '延迟', sortable: false, width: this.sparklineWidthPercent + '%' },
+                { value: 'errors', text: '错误', sortable: false, width: this.sparklineWidthPercent + '%' },
+                { value: 'incident', text: '故障', sortable: false, width: '14ch' },
             ]"
             :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100, -1] }"
         >
@@ -102,9 +102,9 @@ export default {
             loading: false,
             error: '',
             statuses: {
-                critical: { name: 'Critical', color: 'red lighten-1' },
-                warning: { name: 'Warning', color: 'orange lighten-1' },
-                ok: { name: 'Resolved', color: 'grey lighten-1' },
+                critical: { name: '严重', color: 'red lighten-1' },
+                warning: { name: '警告', color: 'orange lighten-1' },
+                ok: { name: '已解决', color: 'grey lighten-1' },
             },
             anomalyApplications: [],
             filter: new Set(),

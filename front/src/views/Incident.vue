@@ -15,30 +15,30 @@
 
                 <div class="d-flex flex-wrap" style="gap: 16px; row-gap: 8px">
                     <div>
-                        <span class="field-name">Started</span>:
+                        <span class="field-name">开始时间</span>:
                         <span>
                             {{ $format.date(incident.opened_at, '{MMM} {DD}, {HH}:{mm}:{ss}') }}
                         </span>
-                        <span> ({{ $format.timeSinceNow(incident.opened_at) }} ago) </span>
+                        <span> ({{ $format.timeSinceNow(incident.opened_at) }} 前) </span>
                     </div>
 
                     <div>
-                        <span class="field-name">Resolved</span>:
+                        <span class="field-name">解决时间</span>:
                         <span>
                             <template v-if="incident.resolved_at">
                                 {{ $format.date(incident.resolved_at, '{MMM} {DD}, {HH}:{mm}:{ss}') }}
                             </template>
-                            <span v-else>still open</span>
+                            <span v-else>仍未解决</span>
                         </span>
                     </div>
 
                     <div>
-                        <span class="field-name">Duration</span>:
+                        <span class="field-name">持续时间</span>:
                         <span>{{ $format.durationPretty(incident.duration) }}</span>
                     </div>
 
                     <div>
-                        <span class="field-name">Application</span>:
+                        <span class="field-name">应用</span>:
                         <router-link
                             :to="{ name: 'overview', params: { view: 'applications', id: incident.application_id }, query: $utils.contextQuery() }"
                             class="name"
@@ -48,14 +48,14 @@
                     </div>
 
                     <div>
-                        <span class="field-name"> Root Cause Analysis: </span>
+                        <span class="field-name"> 根因分析： </span>
                         <template v-if="incident.rca">
-                            <span v-if="incident.rca.status === 'OK'" class="green--text">Done</span>
+                            <span v-if="incident.rca.status === 'OK'" class="green--text">完成</span>
                             <v-tooltip v-else-if="incident.rca.status === 'Failed'" bottom>
                                 <template #activator="{ on }">
-                                    <span v-on="on" class="red--text">Failed</span>
+                                    <span v-on="on" class="red--text">失败</span>
                                 </template>
-                                <v-card class="pa-2"> Failed: {{ incident.rca.error }} </v-card>
+                                <v-card class="pa-2"> 失败原因: {{ incident.rca.error }} </v-card>
                             </v-tooltip>
                             <span v-else class="grey--text">{{ incident.rca.status }}</span>
                         </template>
@@ -71,11 +71,11 @@
                 <v-simple-table dense class="mt-5 table">
                     <thead>
                         <tr>
-                            <th>Service Level Objective (SLO)</th>
-                            <th>Objective</th>
-                            <th>Compliance</th>
+                            <th>服务水平目标 (SLO)</th>
+                            <th>目标</th>
+                            <th>达标情况</th>
                             <th>
-                                Error budget burn rate
+                                错误预算消耗率
                                 <a href="https://docs.coroot.com/alerting/slo-monitoring" target="_blank" class="ml-1"
                                     ><v-icon small>mdi-information-outline</v-icon></a
                                 >
@@ -84,10 +84,10 @@
                     </thead>
                     <tbody>
                         <tr v-if="incident.availability_slo">
-                            <td>Availability</td>
+                            <td>可用性</td>
                             <td>
                                 {{ incident.availability_slo.objective }}
-                                <v-btn small icon @click="edit('SLOAvailability', 'Availability')"><v-icon small>mdi-pencil</v-icon></v-btn>
+                                <v-btn small icon @click="edit('SLOAvailability', '可用性')"><v-icon small>mdi-pencil</v-icon></v-btn>
                             </td>
                             <td>
                                 <span :class="{ fired: incident.availability_slo.violated }">
@@ -106,16 +106,16 @@
                                         {{ availabilityBurnRate.short_window_burn_rate.toFixed(0) }}
                                     </span>
 
-                                    <span class="caption grey--text">threshold: </span>
+                                    <span class="caption grey--text">阈值: </span>
                                     {{ availabilityBurnRate.threshold.toFixed(0) }}
                                 </template>
                             </td>
                         </tr>
                         <tr v-if="incident.latency_slo">
-                            <td>Latency</td>
+                            <td>延迟</td>
                             <td>
                                 {{ incident.latency_slo.objective }}
-                                <v-btn small icon @click="edit('SLOLatency', 'Latency')"><v-icon small>mdi-pencil</v-icon></v-btn>
+                                <v-btn small icon @click="edit('SLOLatency', '延迟')"><v-icon small>mdi-pencil</v-icon></v-btn>
                             </td>
                             <td>
                                 <span :class="{ fired: incident.latency_slo.violated }">
@@ -134,7 +134,7 @@
                                         {{ latencyBurnRate.short_window_burn_rate.toFixed(0) }}
                                     </span>
 
-                                    <span class="caption grey--text">threshold: </span>
+                                    <span class="caption grey--text">阈值: </span>
                                     {{ latencyBurnRate.threshold.toFixed(0) }}
                                 </template>
                             </td>
@@ -153,13 +153,13 @@
             <template v-if="view === 'overview'">
                 <div v-if="incident.rca">
                     <template v-if="incident.rca.root_cause">
-                        <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire</v-icon> Root Cause</div>
+                        <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire</v-icon> 根本原因</div>
                         <Markdown :src="incident.rca.root_cause" :widgets="[]" />
 
                         <template v-if="incident.rca.detailed_root_cause_analysis">
                             <div>
                                 <a @click="toggle_rca_details">
-                                    Show {{ show_details ? 'less' : 'more' }} details
+                                    显示 {{ show_details ? '更少' : '更多' }} 细节
                                     <v-icon v-if="show_details">mdi-chevron-up</v-icon>
                                     <v-icon v-else>mdi-chevron-down</v-icon>
                                 </a>
@@ -177,12 +177,12 @@
                     </template>
 
                     <template v-if="incident.rca.immediate_fixes">
-                        <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire-extinguisher</v-icon> Immediate Fixes</div>
+                        <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-fire-extinguisher</v-icon> 立即修复</div>
                         <Markdown :src="incident.rca.immediate_fixes" :widgets="[]" />
                     </template>
                 </div>
                 <template v-if="incident.widgets">
-                    <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-chart-bar</v-icon> Service Level Indicators (SLIs)</div>
+                    <div class="mt-5 mb-3 text-h6"><v-icon color="red">mdi-chart-bar</v-icon> 服务水平指标 (SLIs)</div>
                     <div class="d-flex flex-wrap mt-5">
                         <Widget
                             v-for="w in incident.widgets"
@@ -234,8 +234,8 @@ export default {
         },
         views() {
             return [
-                { name: 'overview', title: 'overview', icon: 'mdi-format-list-checkbox' },
-                { name: 'traces', title: 'traces', icon: 'mdi-chart-timeline' },
+                { name: 'overview', title: '概览', icon: 'mdi-format-list-checkbox' },
+                { name: 'traces', title: '链路', icon: 'mdi-chart-timeline' },
             ];
         },
     },

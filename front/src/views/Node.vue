@@ -4,7 +4,7 @@
 
         <template v-if="node">
             <div v-if="node.status === 'unknown'" class="text-center">
-                This node is present in the Kubernetes cluster, but it seems that coroot-node-agent is not installed.
+                此节点存在于 Kubernetes 集群中，但似乎未安装 coroot-node-agent。
             </div>
             <Dashboard v-else :name="name" :widgets="node.widgets" class="mt-3" />
         </template>

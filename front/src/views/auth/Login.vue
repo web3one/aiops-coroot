@@ -4,16 +4,16 @@
             <img :src="`${$coroot.base_path}static/icon.svg`" alt=":~#" height="80" />
         </div>
 
-        <h2 class="text-h4 my-5 text-center">Welcome to Coroot</h2>
+        <h2 class="text-h4 my-5 text-center">欢迎使用 Coroot</h2>
 
         <v-btn v-if="sso_enabled && !set_admin_password" block large color="primary" class="mb-4" :href="ssoLoginUrl">
             <v-icon left>mdi-shield-key-outline</v-icon>
-            Login with SSO
+            使用 SSO 登录
         </v-btn>
 
         <div v-if="sso_enabled && !set_admin_password" class="text-center my-4">
             <v-divider class="d-inline-block" style="width: 40%; vertical-align: middle" />
-            <span class="grey--text mx-3">or</span>
+            <span class="grey--text mx-3">或</span>
             <v-divider class="d-inline-block" style="width: 40%; vertical-align: middle" />
         </div>
 
@@ -25,7 +25,7 @@
                 {{ message }}
             </v-alert>
 
-            <div class="font-weight-medium">Email</div>
+            <div class="font-weight-medium">邮箱</div>
             <v-text-field
                 outlined
                 dense
@@ -36,28 +36,28 @@
                 :disabled="set_admin_password"
             />
 
-            <div class="font-weight-medium">Password</div>
+            <div class="font-weight-medium">密码</div>
             <v-text-field outlined dense type="password" v-model="form.password" name="password" :rules="[$validators.notEmpty]" />
 
             <template v-if="set_admin_password">
-                <div class="font-weight-medium">Confirm password</div>
+                <div class="font-weight-medium">确认密码</div>
                 <v-text-field
                     outlined
                     dense
                     type="password"
                     v-model="confirm_password"
-                    :rules="[$validators.notEmpty, (v) => v === form.password || 'passwords do not match']"
+                    :rules="[$validators.notEmpty, (v) => v === form.password || '密码不匹配']"
                 />
             </template>
 
             <v-btn block type="submit" :disabled="!valid" :loading="loading" color="primary" class="mt-5">
-                <template v-if="set_admin_password"> Set Admin Password and Log In </template>
-                <template v-else> Log In </template>
+                <template v-if="set_admin_password"> 设置管理员密码并登录 </template>
+                <template v-else> 登录 </template>
             </v-btn>
         </v-form>
 
         <div v-if="!set_admin_password" class="caption grey--text text-center mt-10">
-            Contact your Coroot administrator if you forgot your email or password.
+            如果您忘记了邮箱或密码，请联系 Coroot 管理员。
         </div>
     </div>
 </template>
@@ -92,7 +92,7 @@ export default {
     mounted() {
         this.checkSSOStatus();
         if (this.$route.query.sso_error) {
-            this.error = 'SSO authentication failed. Please try again or use password login.';
+            this.error = 'SSO 身份验证失败。请重试或使用密码登录。';
         }
     },
 

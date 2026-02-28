@@ -9,10 +9,10 @@
             :items-per-page="20"
             :items="items"
             :headers="[
-                { value: 'application', text: 'Application', sortable: false },
-                { value: 'deployment', text: 'Deployment', sortable: false },
-                { value: 'deployed', text: 'Deployed', sortable: false },
-                { value: 'summary', text: 'Summary', sortable: false },
+                { value: 'application', text: '应用', sortable: false },
+                { value: 'deployment', text: '部署', sortable: false },
+                { value: 'deployed', text: '已部署', sortable: false },
+                { value: 'summary', text: '摘要', sortable: false },
             ]"
             :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100, -1] }"
         >
@@ -29,7 +29,7 @@
                         <router-link :to="item.link" class="text-no-wrap">
                             {{ item.version }}
                         </router-link>
-                        <div class="caption grey--text">age: {{ item.age }}</div>
+                        <div class="caption grey--text">时长: {{ item.age }}</div>
                     </div>
                 </div>
             </template>
@@ -45,7 +45,7 @@
                     </router-link>
                 </div>
             </template>
-            <template #no-data> No deployments detected </template>
+            <template #no-data> 未检测到部署 </template>
         </v-data-table>
     </div>
 </template>

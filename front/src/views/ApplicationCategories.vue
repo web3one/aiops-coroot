@@ -3,12 +3,12 @@
         <v-simple-table>
             <thead>
                 <tr>
-                    <th>Category</th>
-                    <th>Patterns</th>
-                    <th>Notify of incidents</th>
-                    <th>Notify of deployments</th>
-                    <th>Notify of alerts</th>
-                    <th>Actions</th>
+                    <th>分类</th>
+                    <th>模式</th>
+                    <th>通知故障</th>
+                    <th>通知部署</th>
+                    <th>通知告警</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,7 +18,7 @@
                     </td>
                     <td style="line-height: 2em">
                         <div v-if="c.default" class="grey--text">
-                            The default category containing applications that don't fit into other categories
+                            不符合其他分类的应用将被归入此默认分类
                         </div>
                         <template v-else v-for="p in (c.builtin_patterns + ' ' + c.custom_patterns).split(' ').filter((p) => !!p)">
                             <span class="pattern">{{ p }}</span>
@@ -26,13 +26,13 @@
                         </template>
                     </td>
                     <td>
-                        {{ c.notification_settings.incidents.enabled ? 'on' : 'off' }}
+                        {{ c.notification_settings.incidents.enabled ? '开启' : '关闭' }}
                     </td>
                     <td>
-                        {{ c.notification_settings.deployments.enabled ? 'on' : 'off' }}
+                        {{ c.notification_settings.deployments.enabled ? '开启' : '关闭' }}
                     </td>
                     <td>
-                        {{ c.notification_settings.alerts.enabled ? 'on' : 'off' }}
+                        {{ c.notification_settings.alerts.enabled ? '开启' : '关闭' }}
                     </td>
                     <td>
                         <div class="d-flex">
@@ -44,7 +44,7 @@
             </tbody>
         </v-simple-table>
 
-        <v-btn color="primary" class="mt-2" @click="open('', 'add')" small>Add a category</v-btn>
+        <v-btn color="primary" class="mt-2" @click="open('', 'add')" small>添加分类</v-btn>
 
         <ApplicationCategoryForm v-if="action" v-model="action" :name="category.name" :extra_custom_patterns="category.extra_custom_patterns" />
     </div>

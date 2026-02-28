@@ -22,7 +22,7 @@
                         <v-list-item-icon class="mr-3">
                             <v-icon dark>mdi-magnify</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content class="text-no-wrap">Go to...</v-list-item-content>
+                        <v-list-item-content class="text-no-wrap">跳转至...</v-list-item-content>
                         <v-list-item-action class="my-0">{{ mac ? '⌘' : 'ctrl' }}+k</v-list-item-action>
                     </v-list-item>
                     <v-divider class="ma-3" style="border-color: var(--border-dark)"></v-divider>
@@ -80,10 +80,10 @@
                                     <v-icon dark>mdi-hexagon-multiple</v-icon>
                                 </v-list-item-icon>
                                 <v-list-item-content class="pa-0">
-                                    <v-list-item-subtitle class="mb-0">Project</v-list-item-subtitle>
+                                    <v-list-item-subtitle class="mb-0">项目</v-list-item-subtitle>
                                     <v-list-item-title style="line-height: inherit">
                                         <template v-if="project">{{ project.name }}</template>
-                                        <template v-else>choose a project</template>
+                                        <template v-else>选择项目</template>
                                     </v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
@@ -93,9 +93,9 @@
                                 {{ p.name }}
                             </v-list-item>
                             <v-list-item v-if="!user.readonly" :to="{ name: 'project_new' }" exact>
-                                <v-icon small class="mr-1">mdi-plus</v-icon> new project
+                                <v-icon small class="mr-1">mdi-plus</v-icon> 新建项目
                             </v-list-item>
-                            <v-list-item v-else-if="!projects.length"> no projects available </v-list-item>
+                            <v-list-item v-else-if="!projects.length"> 无可用项目 </v-list-item>
                         </v-list>
                     </v-menu>
 
@@ -103,7 +103,7 @@
                         <v-list-item-icon class="mr-3">
                             <v-icon dark>mdi-cog</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content> Settings </v-list-item-content>
+                        <v-list-item-content> 设置 </v-list-item-content>
                     </v-list-item>
 
                     <!-- v-menu.eager is necessary to apply the selected theme -->
@@ -122,17 +122,17 @@
                             <v-list-item v-if="user">
                                 <div class="py-2">
                                     <div>{{ user.name }}</div>
-                                    <div v-if="user.email" class="caption grey--text">login: {{ user.email }}</div>
-                                    <div v-if="user.role" class="caption grey--text">role: {{ user.role }}</div>
+                                    <div v-if="user.email" class="caption grey--text">登录名: {{ user.email }}</div>
+                                    <div v-if="user.role" class="caption grey--text">角色: {{ user.role }}</div>
                                 </div>
                             </v-list-item>
                             <v-divider v-if="user" class="ma-2" />
-                            <v-subheader class="px-4">Theme</v-subheader>
+                            <v-subheader class="px-4">主题</v-subheader>
                             <ThemeSelector />
                             <template v-if="user && !user.anonymous">
                                 <v-divider class="my-2" />
-                                <v-list-item @click="changePassword = true">Change password</v-list-item>
-                                <v-list-item :to="{ name: 'logout' }">Sign out</v-list-item>
+                                <v-list-item @click="changePassword = true">修改密码</v-list-item>
+                                <v-list-item :to="{ name: 'logout' }">退出登录</v-list-item>
                             </template>
                         </v-list>
                     </v-menu>
@@ -143,23 +143,23 @@
                                 <v-list-item-icon class="mr-3">
                                     <v-icon dark>mdi-help-circle-outline</v-icon>
                                 </v-list-item-icon>
-                                <v-list-item-content>Help</v-list-item-content>
+                                <v-list-item-content>帮助</v-list-item-content>
                             </v-list-item>
                         </template>
                         <v-list dense class="pa-0">
                             <v-list-item href="https://docs.coroot.com/" target="_blank">
-                                <v-icon small class="mr-1">mdi-book-open-outline</v-icon>Documentation</v-list-item
+                                <v-icon small class="mr-1">mdi-book-open-outline</v-icon>文档</v-list-item
                             >
                             <v-list-item href="https://github.com/coroot/coroot" target="_blank">
                                 <v-icon small class="mr-1">mdi-github</v-icon>GitHub
                             </v-list-item>
                             <v-list-item href="https://coroot.com/join-slack-community/" target="_blank">
-                                <v-icon small class="mr-1">mdi-slack</v-icon>Slack chat
+                                <v-icon small class="mr-1">mdi-slack</v-icon>Slack 聊天
                             </v-list-item>
                             <v-divider />
-                            <v-list-item> Coroot Edition: {{ $coroot.edition }} </v-list-item>
+                            <v-list-item> Coroot 版本: {{ $coroot.edition }} </v-list-item>
                             <v-list-item href="https://github.com/coroot/coroot/releases" target="_blank">
-                                Version: {{ $coroot.version }}
+                                版本号: {{ $coroot.version }}
                             </v-list-item>
                         </v-list>
                     </v-menu>
@@ -169,7 +169,7 @@
                             <v-icon v-if="menuCollapsed" dark>mdi-chevron-right</v-icon>
                             <v-icon v-else dark>mdi-chevron-left</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content> Collapse </v-list-item-content>
+                        <v-list-item-content> {{ menuCollapsed ? '展开' : '收起' }} </v-list-item-content>
                     </v-list-item>
                 </v-list>
             </template>

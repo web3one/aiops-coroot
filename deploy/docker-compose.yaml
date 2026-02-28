@@ -2,7 +2,7 @@ name: coroot
 services:
   coroot:
     restart: always
-    image: ghcr.io/coroot/coroot${LICENSE_KEY:+-ee} # set 'coroot-ee' as the image if LICENSE_KEY is defined
+    image: ghcr.fzyun.io/coroot/coroot${LICENSE_KEY:+-ee} # set 'coroot-ee' as the image if LICENSE_KEY is defined
     pull_policy: always
     user: root
     volumes:
@@ -24,7 +24,7 @@ services:
 
   node-agent:
     restart: always
-    image: ghcr.io/coroot/coroot-node-agent
+    image: ghcr.fzyun.io/coroot/coroot-node-agent
     pull_policy: always
     privileged: true
     pid: "host"
@@ -40,7 +40,7 @@ services:
 
   cluster-agent:
     restart: always
-    image: ghcr.io/coroot/coroot-cluster-agent
+    image: ghcr.fzyun.io/coroot/coroot-cluster-agent
     pull_policy: always
     volumes:
       - cluster_agent_data:/data

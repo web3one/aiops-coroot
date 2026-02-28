@@ -7,9 +7,9 @@
         <v-simple-table v-if="!error" dense>
             <thead>
                 <tr>
-                    <th>Email (Login)</th>
-                    <th>Name</th>
-                    <th>Role</th>
+                    <th>邮箱 (登录)</th>
+                    <th>名称</th>
+                    <th>角色</th>
                     <th></th>
                 </tr>
             </thead>
@@ -27,7 +27,7 @@
                 </tr>
             </tbody>
         </v-simple-table>
-        <v-btn v-if="!error" color="primary" small class="mt-3" @click="create(false)">Add user</v-btn>
+        <v-btn v-if="!error" color="primary" small class="mt-3" @click="create(false)">添加用户</v-btn>
 
         <v-dialog v-model="form.active" max-width="600">
             <v-card class="pa-4">
@@ -37,7 +37,7 @@
                     <v-btn icon @click="form.active = false"><v-icon>mdi-close</v-icon></v-btn>
                 </div>
                 <v-form v-model="form.valid" ref="form">
-                    <div class="font-weight-medium">Email (Login)</div>
+                    <div class="font-weight-medium">邮箱 (登录)</div>
                     <v-text-field
                         outlined
                         dense
@@ -48,10 +48,10 @@
                         :rules="[$validators.isEmail]"
                     />
 
-                    <div class="font-weight-medium">Name</div>
+                    <div class="font-weight-medium">名称</div>
                     <v-text-field outlined dense v-model="form.name" name="name" :disabled="form.readonly" :rules="[$validators.notEmpty]" />
 
-                    <div class="font-weight-medium">Role</div>
+                    <div class="font-weight-medium">角色</div>
                     <v-select
                         v-model="form.role"
                         :items="roles"
@@ -63,7 +63,7 @@
                         :rules="[$validators.notEmpty]"
                     />
 
-                    <div class="font-weight-medium">Password</div>
+                    <div class="font-weight-medium">密码</div>
                     <v-text-field
                         outlined
                         dense
@@ -154,8 +154,8 @@ export default {
             this.form.error = '';
             this.form.active = true;
             this.form.readonly = false;
-            this.form.title = 'New user';
-            this.form.button.text = 'Create';
+            this.form.title = '新建用户';
+            this.form.button.text = '创建';
             this.form.button.color = 'primary';
             this.form.action = 'create';
             this.form.name = '';
@@ -169,8 +169,8 @@ export default {
             this.form.error = '';
             this.form.active = true;
             this.form.readonly = false;
-            this.form.title = 'Edit user';
-            this.form.button.text = 'Save';
+            this.form.title = '编辑用户';
+            this.form.button.text = '保存';
             this.form.button.color = 'primary';
             this.form.action = 'update';
             this.form.id = user.id;
@@ -185,8 +185,8 @@ export default {
             this.form.error = '';
             this.form.active = true;
             this.form.readonly = true;
-            this.form.title = 'Delete user';
-            this.form.button.text = 'Delete';
+            this.form.title = '删除用户';
+            this.form.button.text = '删除';
             this.form.button.color = 'error';
             this.form.action = 'delete';
             this.form.id = user.id;

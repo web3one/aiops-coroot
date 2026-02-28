@@ -36,18 +36,18 @@
 import TimePicker from '@/components/TimePicker.vue';
 
 export const views = {
-    applications: { name: 'Applications', icon: 'mdi-apps' },
-    incidents: { name: 'Incidents', icon: 'mdi-alert-outline' },
-    alerts: { name: 'Alerts', icon: 'mdi-bell-outline' },
-    map: { name: 'Service Map', icon: 'mdi-map-outline' },
-    traces: { name: 'Traces', icon: 'mdi-chart-timeline' },
-    logs: { name: 'Logs', icon: 'mdi-text-search' },
-    nodes: { name: 'Nodes', icon: 'mdi-server' },
+    applications: { name: '应用', icon: 'mdi-apps' },
+    incidents: { name: '故障', icon: 'mdi-alert-outline' },
+    alerts: { name: '告警', icon: 'mdi-bell-outline' },
+    map: { name: '服务地图', icon: 'mdi-map-outline' },
+    traces: { name: '链路追踪', icon: 'mdi-chart-timeline' },
+    logs: { name: '日志', icon: 'mdi-text-search' },
+    nodes: { name: '节点', icon: 'mdi-server' },
     kubernetes: { name: 'Kubernetes', icon: 'mdi-ship-wheel' },
-    costs: { name: 'Costs', icon: 'mdi-currency-usd' },
-    anomalies: { name: 'Anomalies', icon: 'mdi-waveform' },
-    risks: { name: 'Risks', icon: 'mdi-weather-lightning' },
-    dashboards: { name: 'Dashboards', icon: 'mdi-view-dashboard-outline' },
+    costs: { name: '成本', icon: 'mdi-currency-usd' },
+    anomalies: { name: '异常检测', icon: 'mdi-waveform' },
+    risks: { name: '风险', icon: 'mdi-weather-lightning' },
+    dashboards: { name: '仪表盘', icon: 'mdi-view-dashboard-outline' },
 };
 
 if (window.coroot.edition !== 'Enterprise') {

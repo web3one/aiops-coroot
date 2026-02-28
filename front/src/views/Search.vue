@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" max-width="600" scrollable>
         <v-card class="pa-4">
             <div class="d-flex align-center text-h6 mb-3">
-                <div>Search for apps and nodes</div>
+                <div>搜索应用和节点</div>
                 <v-spacer />
                 <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
             </div>
@@ -18,14 +18,14 @@
                     {{ error }}
                 </v-alert>
 
-                <div v-else-if="results.empty" class="text-center pa-3">No items found</div>
+                <div v-else-if="results.empty" class="text-center pa-3">未发现项目</div>
 
                 <v-list v-else dense @click="dialog = false">
                     <template v-if="results.apps && results.apps.length">
                         <v-list-item class="px-0">
                             <v-list-item-icon class="mr-1"><v-icon small>mdi-apps</v-icon></v-list-item-icon>
                             <v-list-item-content>
-                                <v-list-item-title>Applications</v-list-item-title>
+                                <v-list-item-title>应用</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item
@@ -46,7 +46,7 @@
                         <v-list-item class="px-0">
                             <v-list-item-icon class="mr-1"><v-icon small>mdi-server</v-icon></v-list-item-icon>
                             <v-list-item-content>
-                                <v-list-item-title>Nodes</v-list-item-title>
+                                <v-list-item-title>节点</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item
@@ -63,7 +63,7 @@
                         </v-list-item>
                     </template>
                 </v-list>
-            </v-card-text>
+            </card-text>
         </v-card>
     </v-dialog>
 </template>
