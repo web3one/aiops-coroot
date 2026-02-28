@@ -109,10 +109,7 @@ export default {
 
     methods: {
         checkSSOStatus() {
-            if (this.$coroot.edition !== 'Enterprise') {
-                this.sso_enabled = false;
-                return;
-            }
+
             this.$api.ssoStatus((data, error) => {
                 if (error) {
                     this.sso_enabled = false;

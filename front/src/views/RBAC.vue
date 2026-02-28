@@ -3,12 +3,7 @@
         <v-alert v-if="error" color="red" icon="mdi-alert-octagon-outline" outlined text class="mt-2">
             {{ error }}
         </v-alert>
-        <v-alert v-if="disabled" color="info" outlined text>
-            Coroot 社区版包含三个预定义角色：管理员 (Admin)、编辑者 (Editor) 和查看者 (Viewer)。
-            <br />
-            如需更精细的角色访问控制 (RBAC)，请升级到 Coroot 企业版（起价为每月每 CPU 核心 1 美元）。
-            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">立即开始</a> 您的免费试用。
-        </v-alert>
+
         <v-simple-table v-if="!error" dense class="table mt-5">
             <thead>
                 <tr>
@@ -116,9 +111,7 @@
                             </v-btn>
                         </tfoot>
                     </v-simple-table>
-                    <div v-if="disabled" class="mb-2 caption grey--text">
-                        此表单已禁用，因为 Coroot 社区版不支持调整角色权限。
-                    </div>
+
                     <v-alert v-if="form.error" color="red" icon="mdi-alert-octagon-outline" outlined text>{{ form.error }}</v-alert>
                     <v-alert v-if="form.message" color="green" outlined text>{{ form.message }}</v-alert>
                     <div class="d-flex align-center">
@@ -144,7 +137,7 @@ export default {
         return {
             loading: false,
             error: '',
-            disabled: this.$coroot.edition !== 'Enterprise',
+            disabled: false,
             roles: [],
             actions: [],
             scopes: [],

@@ -3,10 +3,7 @@
         <p>
             Coroot 利用大语言模型 (LLM) 自动生成清晰、简洁的根因摘要，帮助您的团队更快地排查故障。
         </p>
-        <v-alert v-if="disabled" color="info" outlined text>
-            仅在 Coroot 企业版中可用（起价为每月每 CPU 核心 1 美元）。<br />
-            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">立即开始</a> 您的免费试用。
-        </v-alert>
+
         <v-alert v-if="readonly" color="primary" outlined text>
             AI 设置通过配置文件定义，无法通过 UI 修改。
         </v-alert>
@@ -108,7 +105,7 @@ export default {
 
     data() {
         return {
-            disabled: this.$coroot.edition !== 'Enterprise',
+            disabled: false,
             readonly: false,
             form: { provider: '', anthropic: {}, openai: {}, openai_compatible: {} },
             valid: false,

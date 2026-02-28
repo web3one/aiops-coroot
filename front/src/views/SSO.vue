@@ -3,10 +3,7 @@
         <v-alert v-if="error" color="red" icon="mdi-alert-octagon-outline" outlined text class="mt-2">
             {{ error }}
         </v-alert>
-        <v-alert v-if="disabled" color="info" outlined text>
-            单点登录 (SSO) 仅在 Coroot 企业版中可用（起价为每月每 CPU 核心 1 美元）。
-            <a href="https://coroot.com/account" target="_blank" class="font-weight-bold">立即开始</a> 您的免费试用。
-        </v-alert>
+
         <v-alert v-if="readonly" color="primary" outlined text>
             单点登录通过配置文件配置，无法通过 UI 修改。
         </v-alert>
@@ -164,7 +161,7 @@ export default {
 
     data() {
         return {
-            disabled: this.$coroot.edition !== 'Enterprise',
+            disabled: false,
             readonly: false,
             loading: false,
             error: '',

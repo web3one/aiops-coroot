@@ -107,27 +107,10 @@ export default {
 
     methods: {
         shouldShow() {
-            if (this.$route.name === 'project_settings' && this.$route.params.tab === 'cloud') {
-                return false;
-            }
-
-            const permanentDismiss = this.$storage.local(DISMISS_KEY);
-            if (permanentDismiss) {
-                return false;
-            }
-
-            const remindLaterTime = this.$storage.local(REMIND_LATER_KEY);
-            if (remindLaterTime) {
-                const now = new Date().getTime();
-                const reminderTime = parseInt(remindLaterTime);
-                if (now < reminderTime) {
-                    return false;
-                }
-                this.$storage.local(REMIND_LATER_KEY, null);
-            }
-
-            return true;
+            return false;
         },
+
+
 
         getCloudStatus() {
             this.$api.get('cloud', { query: 'status' }, (data, error) => {

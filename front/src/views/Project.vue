@@ -285,9 +285,7 @@ export default {
                 { id: 'notifications', name: '通知', disabled },
                 { id: 'organization', name: '组织' },
             ];
-            if (this.$coroot.edition === 'Enterprise') {
-                tabs = tabs.filter((t) => t.id !== 'cloud');
-            }
+            tabs = tabs.filter((t) => t.id !== 'cloud');
             return tabs;
         },
     },
