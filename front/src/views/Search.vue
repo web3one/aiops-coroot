@@ -63,7 +63,7 @@
                         </v-list-item>
                     </template>
                 </v-list>
-            </card-text>
+        </v-card-text>
         </v-card>
     </v-dialog>
 </template>

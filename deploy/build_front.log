@@ -1,0 +1,106 @@
+🚀 Navigating to frontend directory (/opt/coroot-work/coroot/deploy/../front)...
+📦 Installing npm dependencies...
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: '@achrinza/node-ipc@9.2.5',
+npm warn EBADENGINE   required: {
+npm warn EBADENGINE     node: '8 || 9 || 10 || 11 || 12 || 13 || 14 || 15 || 16 || 17 || 18'
+npm warn EBADENGINE   },
+npm warn EBADENGINE   current: { node: 'v24.11.0', npm: '11.6.1' }
+npm warn EBADENGINE }
+npm warn deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+
+added 992 packages, and audited 993 packages in 13s
+
+124 packages are looking for funding
+  run `npm fund` for details
+
+35 vulnerabilities (5 low, 18 moderate, 12 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+🔨 Building frontend resources for production...
+
+> @coroot/coroot@0.1.0 build-prod
+> vue-cli-service build --dest=../static src/main.js
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+All browser targets in the browserslist configuration have supported ES module.
+Therefore we don't build two separate bundles for differential loading.
+
+
+-  Building for production...
+(node:131704) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+(node:131741) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+(node:131722) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+(node:131730) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+(node:131735) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+(node:131728) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+(node:131721) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[1m[33m[@vue/compiler-sfc][0m[33m the >>> and /deep/ combinators have been deprecated. Use :deep() instead.[0m
+
+[1m[33m[@vue/compiler-sfc][0m[33m the >>> and /deep/ combinators have been deprecated. Use :deep() instead.[0m
+
+[1m[33m[@vue/compiler-sfc][0m[33m the >>> and /deep/ combinators have been deprecated. Use :deep() instead.[0m
+
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ERROR  Failed to compile with 1 error5:27:54 PM
+
+[eslint] 
+/opt/coroot-work/coroot/front/src/views/Search.vue
+  66:13  error  Parsing error: x-invalid-end-tag  vue/no-parsing-error
+
+✖ 1 problem (1 error, 0 warnings)
+
+
+You may use special comments to disable some warnings.
+Use // eslint-disable-next-line to ignore the next line.
+Use /* eslint-disable */ to ignore all warnings in a file.
+ ERROR  Error: Build failed with errors.
+Error: Build failed with errors.
+    at /opt/coroot-work/coroot/front/node_modules/@vue/cli-service/lib/commands/build/index.js:207:23
+    at /opt/coroot-work/coroot/front/node_modules/webpack/lib/webpack.js:148:8
+    at /opt/coroot-work/coroot/front/node_modules/webpack/lib/HookWebpackError.js:68:3
+    at Hook.eval [as callAsync] (eval at create (/opt/coroot-work/coroot/front/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:6:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (/opt/coroot-work/coroot/front/node_modules/tapable/lib/Hook.js:18:14)
+    at Cache.shutdown (/opt/coroot-work/coroot/front/node_modules/webpack/lib/Cache.js:150:23)
+    at /opt/coroot-work/coroot/front/node_modules/webpack/lib/Compiler.js:1225:15
+    at Hook.eval [as callAsync] (eval at create (/opt/coroot-work/coroot/front/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:6:1)
+    at Hook.CALL_ASYNC_DELEGATE [as _callAsync] (/opt/coroot-work/coroot/front/node_modules/tapable/lib/Hook.js:18:14)
+    at Compiler.close (/opt/coroot-work/coroot/front/node_modules/webpack/lib/Compiler.js:1218:23)
