@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Coroot",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/main.go",
+            "args": [
+                "--bootstrap-prometheus-url=http://172.19.66.239:9090",
+                "--bootstrap-clickhouse-address=172.19.66.239:9000"
+            ],
+            "env": {
+                "GOEXPERIMENT": "nocoverageredesign"
+            },
+            "buildFlags": "-ldflags=-compressdwarf=false -gcflags=all='-N -l -dwarflocationlists=true'",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
