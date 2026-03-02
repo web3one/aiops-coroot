@@ -137,32 +137,6 @@
                         </v-list>
                     </v-menu>
 
-                    <v-menu dark right offset-x tile>
-                        <template #activator="{ on }">
-                            <v-list-item v-on="on">
-                                <v-list-item-icon class="mr-3">
-                                    <v-icon dark>mdi-help-circle-outline</v-icon>
-                                </v-list-item-icon>
-                                <v-list-item-content>帮助</v-list-item-content>
-                            </v-list-item>
-                        </template>
-                        <v-list dense class="pa-0">
-                            <v-list-item href="https://docs.coroot.com/" target="_blank">
-                                <v-icon small class="mr-1">mdi-book-open-outline</v-icon>文档</v-list-item
-                            >
-                            <v-list-item href="https://github.com/coroot/coroot" target="_blank">
-                                <v-icon small class="mr-1">mdi-github</v-icon>GitHub
-                            </v-list-item>
-                            <v-list-item href="https://coroot.com/join-slack-community/" target="_blank">
-                                <v-icon small class="mr-1">mdi-slack</v-icon>Slack 聊天
-                            </v-list-item>
-                            <v-divider />
-                            <v-list-item> Coroot 版本: {{ $coroot.edition }} </v-list-item>
-                            <v-list-item href="https://github.com/coroot/coroot/releases" target="_blank">
-                                版本号: {{ $coroot.version }}
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
 
                     <v-list-item @click="toggleMenu">
                         <v-list-item-icon class="mr-3">

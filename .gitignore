@@ -4,3 +4,5 @@
 /.gocache/*
 /config.yaml
 /coroot
+__debug_bin*
+static/

@@ -4,7 +4,7 @@
             <img :src="`${$coroot.base_path}static/icon.svg`" alt=":~#" height="80" />
         </div>
 
-        <h2 class="text-h4 my-5 text-center">欢迎使用 Coroot</h2>
+        <h2 class="text-h4 my-5 text-center">欢迎使用 云鹰智能体</h2>
 
         <v-btn v-if="sso_enabled && !set_admin_password" block large color="primary" class="mb-4" :href="ssoLoginUrl">
             <v-icon left>mdi-shield-key-outline</v-icon>
