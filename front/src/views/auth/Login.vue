@@ -57,7 +57,6 @@
         </v-form>
 
         <div v-if="!set_admin_password" class="caption grey--text text-center mt-10">
-            如果您忘记了邮箱或密码，请联系 Coroot 管理员。
         </div>
     </div>
 </template>
