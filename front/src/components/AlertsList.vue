@@ -3,7 +3,7 @@
         <div class="d-flex align-center mb-4">
             <v-text-field
                 v-model="searchInput"
-                label="search"
+                label="搜索"
                 clearable
                 hide-details
                 dense
@@ -21,7 +21,7 @@
                 <div class="label">{{ s.name }}</div>
             </div>
             <v-checkbox
-                label="Show resolved"
+                label="显示已解决"
                 :input-value="showResolved"
                 @click="changeShowResolved"
                 class="font-weight-regular mt-0 pt-0 ml-2"
@@ -41,24 +41,24 @@
                 small
                 outlined
                 @click="resolveSelected"
-                title="Acknowledge the alert; it will reopen if the condition recurs"
+                title="确认告警；如果条件再次触发，它将重新打开"
             >
                 <v-icon small class="mr-1">mdi-check-circle-outline</v-icon>
-                Resolve ({{ selectedFiring.length }})
+                解决 ({{ selectedFiring.length }})
             </v-btn>
             <v-btn
                 v-if="selectedSuppressible.length"
                 small
                 outlined
                 @click="suppressSelected"
-                title="Permanently silence the alert; it will not reopen until manually reopened"
+                title="永久屏蔽此告警；在手动重新打开之前不会再次触发"
             >
                 <v-icon small class="mr-1">mdi-bell-off-outline</v-icon>
-                Suppress ({{ selectedSuppressible.length }})
+                屏蔽 ({{ selectedSuppressible.length }})
             </v-btn>
-            <v-btn v-if="selectedReopenable.length" small outlined @click="reopenSelected" title="Reopen the alert so it can fire again">
+            <v-btn v-if="selectedReopenable.length" small outlined @click="reopenSelected" title="重新打开告警以便它可以再次触发">
                 <v-icon small class="mr-1">mdi-restore</v-icon>
-                Reopen ({{ selectedReopenable.length }})
+                重新打开 ({{ selectedReopenable.length }})
             </v-btn>
         </div>
 
@@ -73,16 +73,16 @@
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
             must-sort
-            no-data-text="No alerts found"
+            no-data-text="未找到告警"
             :headers="[
                 { value: 'select', text: '', sortable: false, width: '40px' },
-                { value: 'application', text: 'Application', sortable: true, width: '120px' },
-                { value: 'summary', text: 'Summary', sortable: true },
-                { value: 'notifications', text: 'Notifications', sortable: false },
-                { value: 'opened_at', text: 'Opened at', sortable: true },
-                { value: 'resolved_at', text: 'Resolved at', sortable: true },
-                { value: 'duration', text: 'Duration', sortable: true },
-                { value: 'rule', text: 'Rule', sortable: true },
+                { value: 'application', text: '应用', sortable: true, width: '120px' },
+                { value: 'summary', text: '摘要', sortable: true },
+                { value: 'notifications', text: '通知', sortable: false },
+                { value: 'opened_at', text: '发生时间', sortable: true },
+                { value: 'resolved_at', text: '解决时间', sortable: true },
+                { value: 'duration', text: '持续时间', sortable: true },
+                { value: 'rule', text: '规则', sortable: true },
                 { value: 'actions', text: '', sortable: false, align: 'end', width: '20px' },
             ]"
             :footer-props="{ itemsPerPageOptions: [10, 20, 50, 100] }"
@@ -118,18 +118,18 @@
             <template #item.opened_at="{ item }">
                 <div class="d-flex text-no-wrap" :class="{ 'grey--text': item.resolved_at || item.manually_resolved_at || item.suppressed }">
                     {{ $format.date(item.opened_at, '{MMM} {DD}, {HH}:{mm}:{ss}') }}
-                    ({{ $format.timeSinceNow(item.opened_at) }} ago)
+                    ({{ $format.timeSinceNow(item.opened_at) }} 前)
                 </div>
             </template>
 
             <template #item.resolved_at="{ item }">
                 <div v-if="item.suppressed" class="text-no-wrap grey--text">
-                    <div>suppressed</div>
-                    <div v-if="item.resolved_by" class="caption">by {{ item.resolved_by }}</div>
+                    <div>已屏蔽</div>
+                    <div v-if="item.resolved_by" class="caption">由 {{ item.resolved_by }}</div>
                 </div>
                 <div v-else-if="item.manually_resolved_at" class="text-no-wrap grey--text">
                     <div>{{ $format.date(item.manually_resolved_at, '{MMM} {DD}, {HH}:{mm}:{ss}') }}</div>
-                    <div v-if="item.resolved_by" class="caption">by {{ item.resolved_by }}</div>
+                    <div v-if="item.resolved_by" class="caption">由 {{ item.resolved_by }}</div>
                 </div>
                 <div v-else-if="item.resolved_at" class="text-no-wrap grey--text">
                     <div>{{ $format.date(item.resolved_at, '{MMM} {DD}, {HH}:{mm}:{ss}') }}</div>
@@ -201,19 +201,19 @@
                         <v-list-item
                             v-if="isFiring(item)"
                             @click="resolveSelected([item.id])"
-                            title="Acknowledge the alert; it will reopen if the condition recurs"
+                            title="确认告警；如果条件再次触发，它将重新打开"
                         >
-                            <v-icon small class="mr-1">mdi-check-circle-outline</v-icon> Resolve
+                            <v-icon small class="mr-1">mdi-check-circle-outline</v-icon> 解决
                         </v-list-item>
                         <v-list-item
                             v-if="!item.suppressed"
                             @click="suppressSelected([item.id])"
-                            title="Permanently silence the alert; it will not reopen until manually reopened"
+                            title="永久屏蔽此告警；在手动重新打开之前不会再次触发"
                         >
-                            <v-icon small class="mr-1">mdi-bell-off-outline</v-icon> Suppress
+                            <v-icon small class="mr-1">mdi-bell-off-outline</v-icon> 屏蔽
                         </v-list-item>
-                        <v-list-item v-if="isReopenable(item)" @click="reopenSelected([item.id])" title="Reopen the alert so it can fire again">
-                            <v-icon small class="mr-1">mdi-restore</v-icon> Reopen
+                        <v-list-item v-if="isReopenable(item)" @click="reopenSelected([item.id])" title="重新打开告警以便它可以再次触发">
+                            <v-icon small class="mr-1">mdi-restore</v-icon> 重新打开
                         </v-list-item>
                     </v-list>
                 </v-menu>
@@ -228,8 +228,8 @@
 import AlertDetail from './AlertDetail.vue';
 
 const statusDefs = {
-    critical: { name: 'Critical', color: 'red lighten-1' },
-    warning: { name: 'Warning', color: 'orange lighten-1' },
+    critical: { name: '严重', color: 'red lighten-1' },
+    warning: { name: '警告', color: 'orange lighten-1' },
 };
 
 export default {
