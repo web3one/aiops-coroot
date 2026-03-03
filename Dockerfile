@@ -1,8 +1,10 @@
 FROM golang:1.23-bullseye AS backend-builder
 RUN apt update && apt install -y liblz4-dev
+ENV GOPROXY=https://goproxy.cn,direct
 WORKDIR /tmp/src
 COPY go.mod .
 COPY go.sum .
+ENV GODEBUG=http2client=0
 RUN go mod download
 COPY . .
 ARG VERSION=unknown
