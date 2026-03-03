@@ -23,10 +23,16 @@ cd "$ROOT_DIR"
 
 # You can pass additional arguments like VERSION if needed
 # For now, we will build a default tag 'coroot:latest'
-IMAGE_NAME="coroot:latest"
+IMAGE_NAME="push.fzyun.io/founder/aiops.cloudhawk"
 
 docker build -t "$IMAGE_NAME" .
 
+# 3. Push the Docker image
 echo "========================================"
-echo "✅ Docker image '$IMAGE_NAME' has been successfully built!"
+echo "Step 3: Pushing Docker image"
+echo "========================================"
+docker push "$IMAGE_NAME"
+
+echo "========================================"
+echo "✅ Docker image '$IMAGE_NAME' has been successfully built and pushed!"
 echo "========================================"

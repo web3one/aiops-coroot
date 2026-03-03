@@ -2,7 +2,7 @@ name: coroot
 services:
   coroot:
     restart: always
-    image: ghcr.fzyun.io/coroot/coroot${LICENSE_KEY:+-ee} # set 'coroot-ee' as the image if LICENSE_KEY is defined
+    image: push.fzyun.io/founder/aiops.cloudhawk # set 'coroot-ee' as the image if LICENSE_KEY is defined
     pull_policy: always
     user: root
     volumes:
