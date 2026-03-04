@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: OSS UI Settings API
+  version: 1.0.0
+  description: 设置管理相关接口
+servers:
+  - url: http://localhost:3000
+    description: Local Development Server
+
+tags:
+  - name: Settings
+    description: 设置管理
+
+paths:
+  /api/v1/settings/admin/list/build:
+    get:
+      tags: [Settings]
+      summary: 获取管理员列表配置
+      responses:
+        '200':
+          description: 成功
+
+  /api/v1/settings/admin/list/formId:
+    get:
+      tags: [Settings]
+      summary: 获取管理员列表表单ID
+      responses:
+        '200':
+          description: 成功
+
+  /api/v1/settings/bucket/list/build:
+    get:
+      tags: [Settings]
+      summary: 获取设置中的存储桶成员列表
+      responses:
+        '200':
+          description: 成功
+
+  /api/v1/settings/bucket/adduser/build:
+    get:
+      tags: [Settings]
+      summary: 获取添加用户表单
+      responses:
+        '200':
+          description: 成功

@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  title: OSS UI Menu API
+  version: 1.0.0
+  description: 菜单导航生成接口
+servers:
+  - url: http://localhost:3000
+    description: Local Development Server
+
+tags:
+  - name: Menu
+    description: 菜单导航
+
+paths:
+  /api/v1/menu:
+    get:
+      tags: [Menu]
+      summary: 获取动态菜单
+      parameters:
+        - in: query
+          name: current-path
+          schema: { type: string }
+          description: 当前路径
+        - in: query
+          name: project
+          schema: { type: string }
+          description: 项目ID
+      responses:
+        '200':
+          description: 成功返回菜单配置结构

@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: OSS UI Bucket API
+  version: 1.0.0
+  description: 存储桶管理相关接口
+servers:
+  - url: http://localhost:3000
+    description: Local Development Server
+
+tags:
+  - name: Bucket
+    description: 存储桶管理
+
+paths:
+  /api/v1/bucket/list/build:
+    get:
+      tags: [Bucket]
+      summary: 获取存储桶列表构建数据
+      description: 返回用于 UI 渲染的存储桶列表
+      responses:
+        '200':
+          description: 成功返回列表数据
+
+  /api/v1/bucket/list/formId:
+    get:
+      tags: [Bucket]
+      summary: 获取存储桶表单ID
+      responses:
+        '200':
+          description: 成功返回表单ID
+
+  /api/v1/bucket/list/submit:
+    post:
+      tags: [Bucket]
+      summary: 提交存储桶列表操作
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                op: { type: string }
+                bucket: { type: array, items: { type: string } }
+      responses:
+        '200':
+          description: 操作成功
+
+  /api/v1/bucket/list/validate:
+    post:
+      tags: [Bucket]
+      summary: 验证存储桶列表表单
+      responses:
+        '200':
+          description: 验证通过
+
+  /api/v1/bucket/create/build:
+    get:
+      tags: [Bucket]
+      summary: 获取创建/编辑存储桶表单
+      parameters:
+        - in: query
+          name: bucketId
+          schema: { type: string }
+          description: 存储桶ID（编辑模式）
+      responses:
+        '200':
+          description: 成功返回表单构建数据
+
+  /api/v1/bucket/create/submit:
+    post:
+      tags: [Bucket]
+      summary: 提交创建/编辑请求
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                description: { type: string }
+      responses:
+        '200':
+          description: 提交成功
+
+  /api/v1/bucket/detail/build:
+    get:
+      tags: [Bucket]
+      summary: 获取存储桶详情
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: 成功返回详情

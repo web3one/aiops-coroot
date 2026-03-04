@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  title: OSS UI Overview API
+  version: 1.0.0
+  description: 概览页面数据接口
+servers:
+  - url: http://localhost:3000
+    description: Local Development Server
+
+tags:
+  - name: Overview
+    description: 概览页
+
+paths:
+  /api/v1/overview/build:
+    get:
+      tags: [Overview]
+      summary: 获取概览页数据
+      description: 返回项目一览表格及功能介绍面板
+      responses:
+        '200':
+          description: 成功返回概览数据
+
+  /api/v1/overview/formId:
+    get:
+      tags: [Overview]
+      summary: 获取概览页表单ID
+      responses:
+        '200':
+          description: 成功返回ID

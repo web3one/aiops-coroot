@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model OssUser {
+  id          String   @id @default(uuid())
+  uid         String   @unique // "orgId$projectId"
+  orgId       String   @map("org_id")
+  projectId   String   @map("project_id")
+  displayName String   @map("display_name")
+  email       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  subusers OssSubuser[]
+  buckets  OssBucket[]
+  keys     OssKey[]
+
+  @@map("oss_users")
+}
+
+model OssSubuser {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  subuser   String // account name (e.g. "zhangsan")
+  access    String   @default("none") // "full" | "none"
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user OssUser @relation(fields: [userId], references: [id])
+
+  @@unique([userId, subuser])
+  @@map("oss_subusers")
+}
+
+model OssBucket {
+  id        String   @id @default(uuid())
+  name      String
+  ownerId   String   @map("owner_id")
+  size      Float    @default(0)
+  objectNum Int      @default(0) @map("object_num")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  owner    OssUser           @relation(fields: [ownerId], references: [id])
+  policies OssBucketPolicy[]
+
+  @@unique([name, ownerId])
+  @@map("oss_buckets")
+}
+
+model OssBucketPolicy {
+  id        String   @id @default(uuid())
+  bucketId  String   @map("bucket_id")
+  principal String // ARN string
+  actions   String // JSON array of S3 actions
+  createdAt DateTime @default(now()) @map("created_at")
+
+  bucket OssBucket @relation(fields: [bucketId], references: [id], onDelete: Cascade)
+
+  @@unique([bucketId, principal])
+  @@map("oss_bucket_policies")
+}
+
+model OssKey {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  subuser   String? // subuser name if key belongs to a subuser
+  accessKey String   @unique @map("access_key")
+  secretKey String   @map("secret_key")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user OssUser @relation(fields: [userId], references: [id])
+
+  @@map("oss_keys")
+}
