@@ -19,11 +19,12 @@ async function bucketDetail(id: string) {
         "bucket_detail_header": BaseUI.pageTitle(data.name),
         // 基本信息
         "bucket_detail_base": BaseUI.cardPanelWithEdit("基本信息", `${BaseUrl.BUCKET.pageDetail}${id}/edit`, [
-            BaseUI.cardItem("桶名称", data.name),
+            BaseUI.cardItem("智能体名称", data.name),
+            BaseUI.cardItem("描述", data.description || ""),
             BaseUI.cardItem('对象', data.objectNum + '个'),
             BaseUI.cardItem("空间大小", data.size + " MB"),
             BaseUI.cardItemTime("创建时间", data.CreatedAt),
-            BaseUI.cardItem('桶地址', data.address)
+            BaseUI.cardItem('访问地址', data.address)
         ], editable),
     });
 }

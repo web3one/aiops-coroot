@@ -30,7 +30,7 @@ async function submit(body: any) {
         console.info("[bucket update]", params.id, params);
     } else {
         // Create
-        const success = await bucketService.createBucket(params.name, orgId, projectId);
+        const success = await bucketService.createBucket(params.name, orgId, projectId, params.description);
         if (!success) {
             return Base.error("创建智能体失败");
         }
@@ -43,6 +43,7 @@ async function submitParams(body: any) {
         id: body.bucketId,
         projectId: body.project,
         name: body.name,
+        description: body.description,
     };
 }
 
@@ -62,6 +63,9 @@ async function getFormContent(id: string) {
             attributes: { 'pattern': BaseUI.validatePattern.idPattern.pattern },
             readonly: id != '',
         }),
+        'description': BaseUI.textArea('description', '描述', '',
+            BaseUI.validatePattern.description.message, data?.description,
+            { 'pattern': BaseUI.validatePattern.description.pattern }, false),
     };
 }
 

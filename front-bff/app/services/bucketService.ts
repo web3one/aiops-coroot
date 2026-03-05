@@ -3,6 +3,7 @@ import { prisma } from '@/app/lib/prisma';
 export interface BucketInfo {
     ID: string;
     name: string;
+    description?: string;
     size: number;
     objectNum: number;
     address: string;
@@ -70,12 +71,13 @@ export class BucketService {
     /**
      * Create a new bucket.
      */
-    public async createBucket(bucketName: string, orgId: string, projectId: string): Promise<boolean> {
+    public async createBucket(bucketName: string, orgId: string, projectId: string, description?: string): Promise<boolean> {
         try {
             const user = await this.ensureUser(orgId, projectId);
             await prisma.ossBucket.create({
                 data: {
                     name: bucketName,
+                    description: description || null,
                     ownerId: user.id,
                     size: 0,
                     objectNum: 0,
@@ -153,6 +155,7 @@ export class BucketService {
         return {
             ID: bucket.name || bucket.id,
             name: bucket.name,
+            description: bucket.description || undefined,
             size: Math.round(bucket.size * 100) / 100,
             objectNum: bucket.objectNum || 0,
             address: bucket.name,

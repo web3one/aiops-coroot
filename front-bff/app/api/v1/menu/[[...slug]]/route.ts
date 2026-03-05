@@ -41,7 +41,7 @@ function firstMenuGroup(project: string) {
         menuItem("概览", "/oss-overview"),
         { "type": "divider" },
         menuItem("智能体", "/bucket"),
-        menuItem("告警管理", "/secret/list"),
+        menuItem("指标与洞察", "/secret/list"),
     ];
 }
 

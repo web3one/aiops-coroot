@@ -31,7 +31,7 @@ async function buildSecretKeysList() {
 
     // 表格表头
     const header = [
-        BaseUI.tableHeader("accessKeyId", "Access Key ID"),
+        BaseUI.tableHeader("accessKeyId", "关联智能体"),
         BaseUI.tableHeader("createdAt", "创建时间"),
         BaseUI.tableHeader("status", "状态"),
     ];
@@ -58,7 +58,7 @@ async function buildSecretKeysList() {
         // 告警列表
         ...BaseUI.tableWithActions(
             "secret_keys",
-            "告警列表",
+            "指标与洞察列表",
             actions,
             BaseUI.tableSelect(header, data, -1, [[1, "desc"]])
         ),

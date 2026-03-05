@@ -37,11 +37,12 @@ model OssSubuser {
 
 model OssBucket {
   id        String   @id @default(uuid())
-  name      String
-  ownerId   String   @map("owner_id")
-  size      Float    @default(0)
-  objectNum Int      @default(0) @map("object_num")
-  createdAt DateTime @default(now()) @map("created_at")
+  name        String
+  description String?
+  ownerId     String   @map("owner_id")
+  size        Float    @default(0)
+  objectNum   Int      @default(0) @map("object_num")
+  createdAt   DateTime @default(now()) @map("created_at")
 
   owner    OssUser           @relation(fields: [ownerId], references: [id])
   policies OssBucketPolicy[]

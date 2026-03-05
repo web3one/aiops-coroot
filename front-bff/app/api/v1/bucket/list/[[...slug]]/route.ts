@@ -19,7 +19,7 @@ async function listBucket() {
         id: item.ID,
         name: item.name,
         link: BaseUrl.BUCKET.pageDetail + `${item.ID}`,
-        description: "",
+        description: item.description || "",
         author: "",
         created: item.CreatedAt,
     }));
