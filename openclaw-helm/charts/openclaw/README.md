@@ -89,6 +89,8 @@ kubectl exec -n openclaw deployment/openclaw -c main -- node dist/index.js devic
 kubectl exec -n openclaw deployment/openclaw -c main -- node dist/index.js devices approve <REQUEST_ID>
 ```
 
+如果通过 Ingress/反向代理暴露 OpenClaw，还需要把 ingress controller 的 Pod IP 加到 `app-template.gateway.trustedProxies`。OpenClaw 目前仅支持精确 IP，不支持 CIDR。
+
 ---
 
 <details>
@@ -514,6 +516,9 @@ app-template:
 
 ```yaml
 app-template:
+  gateway:
+    trustedProxies:
+      - 10.233.66.230
   ingress:
     main:
       enabled: true

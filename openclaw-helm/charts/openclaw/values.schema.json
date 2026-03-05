@@ -48,6 +48,18 @@
                         "overwrite"
                     ]
                 },
+                "gateway": {
+                    "type": "object",
+                    "properties": {
+                        "trustedProxies": {
+                            "description": "Exact proxy IPs trusted to forward X-Forwarded-* headers to OpenClaw",
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
                 "controllers": {
                     "type": "object",
                     "properties": {

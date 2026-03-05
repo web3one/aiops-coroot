@@ -91,6 +91,25 @@ export class BucketService {
     }
 
     /**
+     * Update a bucket's description.
+     */
+    public async updateBucket(bucketName: string, orgId: string, projectId: string, description?: string): Promise<boolean> {
+        try {
+            const user = await this.ensureUser(orgId, projectId);
+            await prisma.ossBucket.updateMany({
+                where: { name: bucketName, ownerId: user.id },
+                data: {
+                    description: description || null,
+                },
+            });
+            return true;
+        } catch (error) {
+            console.error(`updateBucket(${bucketName}) error:`, error);
+            return false;
+        }
+    }
+
+    /**
      * Delete a bucket.
      */
     public async deleteBucket(bucketName: string, orgId: string, projectId: string): Promise<{ success: boolean; msg?: string }> {

@@ -10,17 +10,17 @@ async function listBucket() {
     const projectId = await Auth.getProjectId();
     const listData = await bucketService.listBuckets(orgId, projectId);
     const header = [
-        BaseUI.tableHeaderName(),
+        BaseUI.tableHeader("name", "名称", BaseUI.tableLink("{item.name}", "item.link", true)),
         BaseUI.tableHeaderDescription(),
-        BaseUI.tableHeader("author", "创建人"),
         BaseUI.tableHeaderCreated(),
+        BaseUI.tableHeader("agent", "操作", BaseUI.tableLink("编辑", "item.edit_link")),
     ];
     const data = listData.map((item: any) => ({
         id: item.ID,
         name: item.name,
-        link: BaseUrl.BUCKET.pageDetail + `${item.ID}`,
+        link: `https://openclaw.logs.bj1.fzyun.io/?token=aiops2026`,
+        edit_link: BaseUrl.BUCKET.pageDetail + `${item.ID}`,
         description: item.description || "",
-        author: "",
         created: item.CreatedAt,
     }));
 

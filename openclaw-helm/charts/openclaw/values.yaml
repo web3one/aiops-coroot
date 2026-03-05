@@ -15,6 +15,11 @@ app-template:
   # @schema type:string;enum:[merge, overwrite];default:merge
   # -- Config mode: `merge` preserves runtime changes, `overwrite` for strict GitOps
   configMode: merge
+  gateway:
+    # @schema type:[array,null];items:type:string
+    # -- Exact proxy IPs trusted to forward X-Forwarded-* headers to OpenClaw.
+    # CIDR notation is not supported by OpenClaw; list each ingress controller Pod IP explicitly.
+    trustedProxies: []
 
   defaultPodOptions:
     # -- Pod security context
@@ -82,6 +87,9 @@ app-template:
                     process.exit(1);
                   }
                   const helm = JSON.parse(stripComments(fs.readFileSync('/config/openclaw.json', 'utf8')));
+                  const trustedProxies = JSON.parse(process.env.TRUSTED_PROXIES_JSON || '[]');
+                  helm.gateway = helm.gateway || {};
+                  helm.gateway.trustedProxies = trustedProxies;
                   const deepMerge = (target, source) => {
                     for (const key of Object.keys(source)) {
                       if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
@@ -99,7 +107,28 @@ app-template:
                   log "Config merged successfully"
                 else
                   log "WARNING: Merge failed (existing config may not be valid JSON), falling back to overwrite"
-                  cp /config/openclaw.json /home/node/.openclaw/openclaw.json
+                  node -e "
+                    const fs = require('fs');
+                    const stripComments = (s) => {
+                      let r = '', q = false, i = 0;
+                      while (i < s.length) {
+                        if (q) {
+                          if (s[i] === '\\\\') { r += s[i] + s[i+1]; i += 2; continue; }
+                          if (s[i] === '\"') q = false;
+                          r += s[i++];
+                        } else if (s[i] === '\"') {
+                          q = true; r += s[i++];
+                        } else if (s[i] === '/' && s[i+1] === '/') {
+                          while (i < s.length && s[i] !== '\n') i++;
+                        } else { r += s[i++]; }
+                      }
+                      return r;
+                    };
+                    const config = JSON.parse(stripComments(fs.readFileSync('/config/openclaw.json', 'utf8')));
+                    config.gateway = config.gateway || {};
+                    config.gateway.trustedProxies = JSON.parse(process.env.TRUSTED_PROXIES_JSON || '[]');
+                    fs.writeFileSync('/home/node/.openclaw/openclaw.json', JSON.stringify(config, null, 2));
+                  "
                 fi
               else
                 if [ ! -f /home/node/.openclaw/openclaw.json ]; then
@@ -107,11 +136,33 @@ app-template:
                 else
                   log "Mode: overwrite - replacing config with Helm values"
                 fi
-                cp /config/openclaw.json /home/node/.openclaw/openclaw.json
+                node -e "
+                  const fs = require('fs');
+                  const stripComments = (s) => {
+                    let r = '', q = false, i = 0;
+                    while (i < s.length) {
+                      if (q) {
+                        if (s[i] === '\\\\') { r += s[i] + s[i+1]; i += 2; continue; }
+                        if (s[i] === '\"') q = false;
+                        r += s[i++];
+                      } else if (s[i] === '\"') {
+                        q = true; r += s[i++];
+                      } else if (s[i] === '/' && s[i+1] === '/') {
+                        while (i < s.length && s[i] !== '\n') i++;
+                      } else { r += s[i++]; }
+                    }
+                    return r;
+                  };
+                  const config = JSON.parse(stripComments(fs.readFileSync('/config/openclaw.json', 'utf8')));
+                  config.gateway = config.gateway || {};
+                  config.gateway.trustedProxies = JSON.parse(process.env.TRUSTED_PROXIES_JSON || '[]');
+                  fs.writeFileSync('/home/node/.openclaw/openclaw.json', JSON.stringify(config, null, 2));
+                "
               fi
               log "Config initialization complete"
           env:
             CONFIG_MODE: "{{ .Values.configMode | default \"merge\" }}"
+            TRUSTED_PROXIES_JSON: '{{ .Values.gateway.trustedProxies | toJson }}'
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -446,7 +497,7 @@ app-template:
               // - CIDR notation is NOT supported - list each proxy IP individually
               // - IPv6 exact addresses may work but are untested
               // - Recommend single-stack IPv4 deployments for simplicity
-              "trustedProxies": ["10.0.0.1"],
+              "trustedProxies": [],
               // For non-loopback gateway binds (--bind lan), allow Control UI origin
               // derivation from Host header unless explicit allowedOrigins are set.
               "controlUi": {
@@ -472,7 +523,7 @@ app-template:
                 "workspace": "/home/node/.openclaw/workspace",
                 "model": {
                   // Uses OPENAI_API_KEY and OPENAI_BASE_URL from environment
-                  "primary": "openai/doubao-seed-2-0-code-preview-260215"
+                  "primary": "${OPENCLAW_PRIMARY_MODEL}"
                 },
                 "userTimezone": "UTC",
                 "timeoutSeconds": 600,
@@ -488,6 +539,18 @@ app-template:
                   }
                 }
               ]
+            },
+
+            // Register OpenAI-compatible endpoint so custom model IDs
+            // (e.g. Doubao) are treated as valid runtime models.
+            "models": {
+              "providers": {
+                "openai": {
+                  "baseUrl": "${OPENAI_BASE_URL}",
+                  "api": "openai-completions",
+                  "models": []
+                }
+              }
             },
 
             // Session management
@@ -555,26 +618,26 @@ app-template:
     main:
       # @schema type:boolean;default:false
       # -- Enable ingress resource creation
-      enabled: false
+      enabled: true
       # Uncomment and configure for your environment
-      # className: nginx
-      # annotations:
-      #   cert-manager.io/cluster-issuer: "your-issuer"
-      #   nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      #   nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-      #   nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      # tls:
-      #   - secretName: openclaw-tls
-      #     hosts:
-      #       - openclaw.example.com
-      # hosts:
-      #   - host: openclaw.example.com
-      #     paths:
-      #       - path: /
-      #         pathType: Prefix
-      #         service:
-      #           identifier: main
-      #           port: http
+      className: nginx
+      annotations:
+        cert-manager.io/cluster-issuer: "ca-issuer"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      tls:
+        - secretName: openclaw-tls
+          hosts:
+            - openclaw.logs.bj1.fzyun.io
+      hosts:
+        - host: openclaw.logs.bj1.fzyun.io
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: main
+                port: http
 
   persistence:
     # ConfigMap for init container to copy from

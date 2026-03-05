@@ -26,8 +26,11 @@ async function submit(body: any) {
     const projectId = await Auth.getProjectId();
 
     if (params.id) {
-        // Update — bucket update is limited; just log it
-        console.info("[bucket update]", params.id, params);
+        // Update
+        const success = await bucketService.updateBucket(params.name, orgId, projectId, params.description);
+        if (!success) {
+            return Base.error("编辑智能体失败");
+        }
     } else {
         // Create
         const success = await bucketService.createBucket(params.name, orgId, projectId, params.description);
@@ -54,7 +57,7 @@ async function getFormContent(id: string) {
         const projectId = await Auth.getProjectId();
         data = await bucketService.getBucket(id, orgId, projectId);
     }
-    return {
+    const result: any = {
         'name': BaseUI.textField({
             id: 'name',
             title: '名称',
@@ -67,6 +70,10 @@ async function getFormContent(id: string) {
             BaseUI.validatePattern.description.message, data?.description,
             { 'pattern': BaseUI.validatePattern.description.pattern }, false),
     };
+    if (id != '') {
+        result['bucketId'] = BaseUI.hiddenInput('bucketId', id);
+    }
+    return result;
 }
 
 

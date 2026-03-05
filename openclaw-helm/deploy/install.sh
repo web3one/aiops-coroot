@@ -11,10 +11,53 @@ CHART_DIR="$SCRIPT_DIR/../charts/openclaw"
 NAMESPACE="aiops-openclaw"
 RELEASE_NAME="openclaw"
 # 优先读取环境变量，如果没有设置则使用占位符
-API_KEY=${DOUBAO_API_KEY:-"f1370e73-7700-45f3-9baa-df96ecedf88f"}
-GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN:-"aiops2026"}
+API_KEY="sk-s4vrxNCjeQiez7Hh89usyq9hEOflnQbfZolVZskJovLBDVGd"
+API_BASE_URL="https://api.moonshot.cn/v1"
+GATEWAY_TOKEN="aiops2026"
+PRIMARY_MODEL_RAW="kimi-k2.5"
+TRUSTED_PROXIES_RAW=""
+# OpenClaw 运行时需要 provider/model 形式；openai provider 会负责路由到 OpenAI 兼容后端。
+if [[ "$PRIMARY_MODEL_RAW" == */* ]]; then
+    PRIMARY_MODEL="$PRIMARY_MODEL_RAW"
+else
+    PRIMARY_MODEL="openai/$PRIMARY_MODEL_RAW"
+fi
+
+discover_trusted_proxies() {
+    if [[ -n "$TRUSTED_PROXIES_RAW" ]]; then
+        tr ',' '\n' <<<"$TRUSTED_PROXIES_RAW" | sed '/^[[:space:]]*$/d' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
+        return 0
+    fi
+
+    kubectl get pods -A \
+      -l app.kubernetes.io/component=controller \
+      -o jsonpath='{range .items[*]}{.metadata.labels.app\.kubernetes\.io/name}{"\t"}{.status.podIP}{"\n"}{end}' 2>/dev/null \
+      | awk -F '\t' '$1 == "ingress-nginx" && $2 != "" {print $2}' \
+      | sort -u
+}
+
+TRUSTED_PROXIES_LIST="$(discover_trusted_proxies || true)"
+TRUSTED_PROXIES_JSON="[]"
+if [[ -n "$TRUSTED_PROXIES_LIST" ]]; then
+    mapfile -t TRUSTED_PROXIES_ARRAY <<<"$TRUSTED_PROXIES_LIST"
+    TRUSTED_PROXIES_JSON="["
+    for ip in "${TRUSTED_PROXIES_ARRAY[@]}"; do
+        [[ -z "$ip" ]] && continue
+        if [[ "$TRUSTED_PROXIES_JSON" != "[" ]]; then
+            TRUSTED_PROXIES_JSON+=", "
+        fi
+        TRUSTED_PROXIES_JSON+="\"$ip\""
+    done
+    TRUSTED_PROXIES_JSON+="]"
+fi
 
 echo "=== 开始部署 OpenClaw ==="
+if [[ "$TRUSTED_PROXIES_JSON" == "[]" ]]; then
+    echo "警告：未自动发现 ingress-nginx controller Pod IP；trustedProxies 将保持为空。"
+    echo "      如需通过外部 Ingress 访问，请设置 OPENCLAW_TRUSTED_PROXIES=ip1,ip2 或在 values 中配置 app-template.gateway.trustedProxies。"
+else
+    echo "检测到 trustedProxies: $TRUSTED_PROXIES_JSON"
+fi
 
 print_debug_info() {
     echo "=== 部署失败诊断信息开始 ==="
@@ -30,8 +73,16 @@ if [ ! -d "$CHART_DIR" ]; then
     echo "错误：未找到本地 Chart 目录 '$CHART_DIR'！"
     exit 1
 fi
-# 更新本地 Chart 依赖的其它的 subchart (例如 app-template)
-helm dependency update "$CHART_DIR"
+# 优先使用本地依赖包，离线环境下避免因仓库不可达而失败
+if ! helm dependency build "$CHART_DIR"; then
+    if ls "$CHART_DIR"/charts/*.tgz >/dev/null 2>&1; then
+        echo "警告：无法在线刷新 Helm 依赖，继续使用本地缓存的 charts/*.tgz。"
+    else
+        echo "错误：Helm 依赖构建失败，且本地不存在可用的 charts/*.tgz。"
+        echo "请检查网络/DNS，或先手动执行: helm dependency update \"$CHART_DIR\""
+        exit 1
+    fi
+fi
 
 # 2. 创建用于部署的 Kubernetes 命名空间（如果它不存在的话）
 echo "[2/5] 正在准备命名空间 '$NAMESPACE'..."
@@ -51,15 +102,19 @@ kubectl delete secret openclaw-env-secret -n "$NAMESPACE" --ignore-not-found
 # 将 API Key 和 Gateway Token 储存在 Secret 里，供内部容器挂载使用
 kubectl create secret generic openclaw-env-secret -n "$NAMESPACE" \
   --from-literal=OPENAI_API_KEY="$API_KEY" \
-  --from-literal=OPENAI_BASE_URL="https://ark.cn-beijing.volces.com/api/v3" \
-  --from-literal=OPENCLAW_GATEWAY_TOKEN="$GATEWAY_TOKEN"
+  --from-literal=OPENAI_BASE_URL="$API_BASE_URL" \
+  --from-literal=OPENCLAW_GATEWAY_TOKEN="$GATEWAY_TOKEN" \
+  --from-literal=OPENCLAW_PRIMARY_MODEL="$PRIMARY_MODEL"
 echo "应用密钥已配置完成。"
 
 
 # 5. 使用 Helm 安装或升级 Release
 echo "[5/5] 正在使用本地 Chart 安装/升级 OpenClaw..."
 # upgrade --install 表示如果不存在则安装，如果已存在则更新配置
-if ! helm upgrade --install "$RELEASE_NAME" "$CHART_DIR" -n "$NAMESPACE" --wait --timeout 10m --atomic; then
+if ! helm upgrade --install "$RELEASE_NAME" "$CHART_DIR" -n "$NAMESPACE" \
+    --reset-values \
+    --set-json "app-template.gateway.trustedProxies=$TRUSTED_PROXIES_JSON" \
+    --wait --timeout 10m --atomic; then
     print_debug_info
     exit 1
 fi
