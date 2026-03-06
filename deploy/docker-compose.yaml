@@ -22,6 +22,14 @@ services:
       prometheus:
         condition: service_healthy
 
+  front-bff:
+    restart: always
+    image: ${BFF_IMAGE_NAME:-push.fzyun.io/founder/aiops.front-bff}
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-}
+    ports:
+      - 3000:3000
+
   node-agent:
     restart: always
     image: ghcr.fzyun.io/coroot/coroot-node-agent

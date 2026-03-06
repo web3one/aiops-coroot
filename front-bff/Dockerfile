@@ -6,12 +6,26 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
+ARG NPM_REGISTRY=https://registry.npmjs.org
 
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm install --registry=https://registry.npmmirror.com
+# Install dependencies with lockfile and explicit retry handling for unstable networks.
+RUN npm config set registry "${NPM_REGISTRY}" \
+    && npm config set fetch-retries 5 \
+    && npm config set fetch-retry-mintimeout 20000 \
+    && npm config set fetch-retry-maxtimeout 120000 \
+    && npm config set fetch-timeout 300000 \
+    && for attempt in 1 2 3; do \
+        npm ci --no-audit --prefer-offline && exit 0; \
+        echo "npm ci failed on attempt ${attempt}, retrying..."; \
+        npm cache clean --force; \
+        sleep $((attempt * 5)); \
+    done; \
+    exit 1
 
 # Copy source code
 COPY . .
@@ -29,6 +43,8 @@ WORKDIR /app
 # Install glibc compatibility (needed if running Next.js in production mode)
 RUN apk add --no-cache libc6-compat
 
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
