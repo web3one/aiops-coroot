@@ -3,10 +3,9 @@ import { BaseUI } from "@/app/commons/BaseUI";
 import { BaseUrl } from "@/app/commons/BaseUrl";
 import { Auth } from "@/app/utils/Auth";
 import { secretService } from "@/app/services/secretService";
+import { bucketService } from "@/app/services/bucketService";
 import { extractAuthHeaders } from "@/app/services/headerUtils";
 import { headers as nextHeaders } from "next/dist/server/request/headers";
-
-
 async function getRequestContext() {
     const nextHeader = await nextHeaders();
     const orgId = nextHeader.get('Current-Org') || '';
@@ -25,22 +24,22 @@ async function buildSecretKeysList() {
     const projectId = await Auth.getProjectId();
     const orgId = await Auth.getOrgId();
 
-    // 获取密钥列表
-    let response = await secretService.getKeys(orgId, projectId);
-    let listData = response?.keys || [];
+    // 获取智能体列表
+    let listData = await bucketService.listBuckets(orgId, projectId);
 
     // 表格表头
     const header = [
-        BaseUI.tableHeader("accessKeyId", "关联智能体"),
+        BaseUI.tableHeader("name", "关联智能体"),
         BaseUI.tableHeader("createdAt", "创建时间"),
-        BaseUI.tableHeader("status", "状态"),
+        BaseUI.tableHeader("status", "可视化仪表盘", BaseUI.tableLink("访问", "item.link", true)),
     ];
 
     // 表格数据
     const data = listData.map((item: any) => ({
-        id: item.accessKeyId || "",
-        accessKeyId: item.accessKeyId || "",
-        createdAt: item.createdAt ? new Date(item.createdAt).toLocaleString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).replace(/\//g, "-") : "",
+        id: item.ID || "",
+        name: item.name || "",
+        link: "http://172.19.66.239:8080/",
+        createdAt: item.CreatedAt ? new Date(item.CreatedAt).toLocaleString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).replace(/\//g, "-") : "",
         status: item.status || "ENABLE",
     }));
 

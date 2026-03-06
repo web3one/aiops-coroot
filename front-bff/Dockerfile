@@ -1,5 +1,9 @@
 # Build stage
 FROM docker.fzyun.io/node:22-alpine AS builder
+
+# Install glibc compatibility (needed for Prisma engine)
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
 
@@ -11,6 +15,9 @@ RUN npm install --registry=https://registry.npmmirror.com
 
 # Copy source code
 COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
 
 # Build Next.js application
 RUN npm run build

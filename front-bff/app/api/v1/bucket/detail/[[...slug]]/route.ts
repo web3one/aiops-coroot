@@ -24,8 +24,20 @@ async function bucketDetail(id: string) {
             BaseUI.cardItem('对象', data.objectNum + '个'),
             BaseUI.cardItem("空间大小", data.size + " MB"),
             BaseUI.cardItemTime("创建时间", data.CreatedAt),
-            BaseUI.cardItem('访问地址', data.address)
+            BaseUI.cardItem('访问地址', "http://172.19.66.239:8080/" + data.address)
         ], editable),
+        "bucket_node": BaseUI.cardPanelWithEdit("Agent 安装", ``, [
+            BaseUI.cardItem("", "docker run --detach --name coroot-node-agent \
+                            --pull=always \
+                            --privileged --pid host \
+                            -v /sys/kernel/debug:/sys/kernel/debug:rw \
+                            -v /sys/fs/cgroup:/host/sys/fs/cgroup:ro \
+                            ghcr.io/coroot/coroot-node-agent:latest \
+                            --cgroupfs-root=/host/sys/fs/cgroup \
+                            --collector-endpoint=http://172.19.66.239:8080 \
+                            --api-key= \
+                            --scrape-interval=15s"),
+        ], false),
     });
 }
 

@@ -13,7 +13,7 @@ async function listBucket() {
         BaseUI.tableHeader("name", "名称", BaseUI.tableLink("{item.name}", "item.link", true)),
         BaseUI.tableHeaderDescription(),
         BaseUI.tableHeaderCreated(),
-        BaseUI.tableHeader("agent", "操作", BaseUI.tableLink("编辑", "item.edit_link")),
+        BaseUI.tableHeader("agent", "操作", BaseUI.tableLink("查看", "item.edit_link")),
     ];
     const data = listData.map((item: any) => ({
         id: item.ID,
