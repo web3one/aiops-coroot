@@ -10,12 +10,12 @@ CHART_DIR="$SCRIPT_DIR/../charts/openclaw"
 # 定义部署使用的变量
 NAMESPACE="aiops-openclaw"
 RELEASE_NAME="openclaw"
-# 优先读取环境变量，如果没有设置则使用占位符
-API_KEY="sk-s4vrxNCjeQiez7Hh89usyq9hEOflnQbfZolVZskJovLBDVGd"
-API_BASE_URL="https://api.moonshot.cn/v1"
-GATEWAY_TOKEN="aiops2026"
-PRIMARY_MODEL_RAW="kimi-k2.5"
-TRUSTED_PROXIES_RAW=""
+# 优先读取环境变量，如果没有设置则使用默认值
+API_KEY="${OPENAI_API_KEY:-sk-sp-02d8649d6e224881a6df2d85a3eb27d4}"
+API_BASE_URL="${OPENAI_BASE_URL:-https://coding.dashscope.aliyuncs.com/v1}"
+GATEWAY_TOKEN="${OPENCLAW_GATEWAY_TOKEN:-aiops2026}"
+PRIMARY_MODEL_RAW="${OPENCLAW_PRIMARY_MODEL:-qwen3.5-plus}"
+TRUSTED_PROXIES_RAW="${OPENCLAW_TRUSTED_PROXIES:-}"
 # OpenClaw 运行时需要 provider/model 形式；openai provider 会负责路由到 OpenAI 兼容后端。
 if [[ "$PRIMARY_MODEL_RAW" == */* ]]; then
     PRIMARY_MODEL="$PRIMARY_MODEL_RAW"
@@ -118,6 +118,10 @@ if ! helm upgrade --install "$RELEASE_NAME" "$CHART_DIR" -n "$NAMESPACE" \
     print_debug_info
     exit 1
 fi
+
+echo "[6/6] 正在重启 Deployment 以加载最新 Secret 环境变量..."
+kubectl rollout restart deployment/"$RELEASE_NAME" -n "$NAMESPACE"
+kubectl rollout status deployment/"$RELEASE_NAME" -n "$NAMESPACE" --timeout=10m
 
 echo "=== 部署完成 ==="
 echo "部署操作提示："
