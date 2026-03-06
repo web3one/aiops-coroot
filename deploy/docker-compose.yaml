@@ -25,8 +25,8 @@ services:
   front-bff:
     restart: always
     image: ${BFF_IMAGE_NAME:-docker.fzyun.io/founder/aiops.front-bff}
-    environment:
-      - DATABASE_URL=${DATABASE_URL:-}
+    env_file:
+      - ../front-bff/.env
     ports:
       - 3000:3000
 
